@@ -56,6 +56,12 @@ export default new Router({
           path: 'upgrade',
           component: () => import('@/views/dashboard/Upgrade'),
         },
+        // main
+        {
+          name: 'Instances',
+          path: 'components/instances',
+          component: () => import('@/views/dashboard/main/InstanceMenu'),
+        },
       ],
     },
   ],

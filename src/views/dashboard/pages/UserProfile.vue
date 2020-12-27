@@ -20,24 +20,16 @@
             </div>
           </template>
 
-          <v-form>
+          <v-form @submit.prevent="onSubmit">
             <v-container class="py-0">
               <v-row>
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <v-text-field
-                    label="Company (disabled)"
-                    disabled
-                  />
-                </v-col>
 
                 <v-col
                   cols="12"
                   md="4"
                 >
                   <v-text-field
+                    v-model="user"
                     class="purple-input"
                     label="User Name"
                   />
@@ -48,8 +40,10 @@
                   md="4"
                 >
                   <v-text-field
-                    label="Email Address"
+                    v-model="pwd"
+                    label="Password"
                     class="purple-input"
+                    type="password"
                   />
                 </v-col>
 
@@ -73,61 +67,17 @@
                   />
                 </v-col>
 
-                <v-col cols="12">
-                  <v-text-field
-                    label="Adress"
-                    class="purple-input"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <v-text-field
-                    label="City"
-                    class="purple-input"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <v-text-field
-                    label="Country"
-                    class="purple-input"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <v-text-field
-                    class="purple-input"
-                    label="Postal Code"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12">
-                  <v-textarea
-                    class="purple-input"
-                    label="About Me"
-                    value="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-                  />
-                </v-col>
-
                 <v-col
                   cols="12"
                   class="text-right"
                 >
                   <v-btn
+                  type="submit"
+                  value="Submit"
                     color="success"
                     class="mr-0"
                   >
-                    Update Profile
+                    Login
                   </v-btn>
                 </v-col>
               </v-row>
@@ -172,7 +122,67 @@
 </template>
 
 <script>
+  import { mapMutations } from 'vuex'
   export default {
-    //
+    data () {
+      return {
+        corn: '',
+        user: '',
+        pwd: '',
+        token: null,
+      }
+    },
+    methods: {
+      ...mapMutations({
+        setUserInfo: 'SET_USER',
+      }),
+      onSubmit () {
+        const user = this.user
+        const pwd = this.pwd
+        const data = { email: user, password: pwd }
+        console.log(this.corn + '/login/')
+        fetch(this.corn + '/login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json()
+            } else {
+              console.log('Server returned ' + response.status + '   ' + response.statusText)
+            }
+          })
+          .then(response => {
+            console.log(response)
+            const token = response.token
+            const userInfo = {
+              user: this.user,
+              pwd: this.pwd,
+              token: token,
+            }
+            this.setUserInfo(userInfo)
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      /* onSubmit () {
+        const token = this.login()
+
+      }, */
+    },
+    mounted () {
+      const state = this.$store.state
+      this.corn = state.url
+      const fromState = state.user
+      if (fromState) {
+        this.user = fromState.email
+        this.pwd = fromState.pwd
+        this.token = fromState.token
+      }
+    },
   }
 </script>

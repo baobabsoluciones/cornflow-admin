@@ -141,6 +141,11 @@
           icon: 'mdi-bell',
           to: '/components/notifications',
         },
+        {
+          title: 'Main',
+          icon: 'mdi-bell',
+          to: '/components/instances',
+        },
       ],
     }),
 
