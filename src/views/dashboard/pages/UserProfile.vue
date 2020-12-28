@@ -123,13 +123,22 @@
 
 <script>
   import { mapMutations } from 'vuex'
+  import { signin } from '@/api'
   export default {
     data () {
       return {
         corn: '',
         user: '',
         pwd: '',
-        token: null,
+      }
+    },
+    mounted () {
+      const state = this.$store.state
+      this.corn = state.url
+      const fromState = state.user
+      if (fromState) {
+        this.user = fromState.email
+        this.pwd = fromState.pwd
       }
     },
     methods: {
@@ -139,22 +148,7 @@
       onSubmit () {
         const user = this.user
         const pwd = this.pwd
-        const data = { email: user, password: pwd }
-        console.log(this.corn + '/login/')
-        fetch(this.corn + '/login/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-          .then(response => {
-            if (response.ok) {
-              return response.json()
-            } else {
-              console.log('Server returned ' + response.status + '   ' + response.statusText)
-            }
-          })
+        signin(this.corn, user, pwd)
           .then(response => {
             console.log(response)
             const token = response.token
@@ -169,20 +163,6 @@
             console.log(err)
           })
       },
-      /* onSubmit () {
-        const token = this.login()
-
-      }, */
-    },
-    mounted () {
-      const state = this.$store.state
-      this.corn = state.url
-      const fromState = state.user
-      if (fromState) {
-        this.user = fromState.email
-        this.pwd = fromState.pwd
-        this.token = fromState.token
-      }
     },
   }
 </script>

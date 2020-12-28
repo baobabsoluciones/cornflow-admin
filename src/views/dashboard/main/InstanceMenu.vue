@@ -5,184 +5,139 @@
     tag="section"
   >
     <base-v-component
-      heading="Simple Tables"
+      heading="Instances"
       link="components/simple-tables"
     />
 
     <base-material-card
       icon="mdi-clipboard-text"
-      title="Simple Table"
+      title="Instances: click on an instance to show executions for the Instance"
       class="px-5 py-3"
     >
+      <v-btn
+        type="submit"
+        value="Submit"
+        color="success"
+        class="mr-0"
+        v-on:click="loadData"
+      >
+      Update!
+      </v-btn>
       <v-simple-table>
         <thead>
           <tr>
-            <th class="primary--text">
-              ID
-            </th>
-            <th class="primary--text">
-              Name
-            </th>
-            <th class="primary--text">
-              Country
-            </th>
-            <th class="primary--text">
-              City
-            </th>
-            <th class="text-right primary--text">
-              Salary
+            <th
+              v-for="col in instCols"
+              :key="col"
+              class="primary--text"
+            >
+              {{ col }}
             </th>
           </tr>
         </thead>
-
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
+          <template
+            v-for="(inst,i) in instances"
+          >
+            <tr
+              @click="checkInst(i, inst)"
+              :key="i"
+            >
+              <td>{{ inst.reference_id }}</td>
+              <td>{{ inst.name }}</td>
+              <td>{{ inst.created_at }}</td>
+              <td>{{ inst.modified_at }}</td>
+              <td>{{ inst.executions.length }}</td>
+              <td
+                class="justify-center layout px-0"
+              >
+                <v-btn
+                  icon
+                  class="mx-0"
+                  @click="editInstance(i, inst)"
+                >
+                  <v-icon color="teal">edit</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  class="mx-0"
+                  @click="deleteInstance(i, inst)"
+                >
+                  <v-icon color="pink">delete</v-icon>
+                </v-btn>
+              </td>
+            </tr>
+            <tr
+              v-if="inst.contentVisible"
+              :key="inst.reference_id"
+            >
+              <td :colspan="5">
+                <div class="accordian-body">
+                  <executions-table
+                    :instanceId="i"
+                    :executions="inst.executions"
+                    v-if="inst.contentVisible"
+                  >
+                  </executions-table>
+                </div>
+              </td>
+            </tr>
+          </template>
         </tbody>
       </v-simple-table>
     </base-material-card>
 
     <div class="py-3" />
 
-    <base-material-card
-      color="success"
-      dark
-      icon="mdi-clipboard-plus"
-      title="Table on Dark Background"
-      class="px-5 py-3"
-    >
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Country</th>
-            <th>City</th>
-            <th class="text-right">
-              Salary
-            </th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Dakota Rice</td>
-            <td>Niger</td>
-            <td>Oud-Turnhout</td>
-            <td class="text-right">
-              $36,738
-            </td>
-          </tr>
-
-          <tr>
-            <td>2</td>
-            <td>Minverva Hooper</td>
-            <td>Curaçao</td>
-            <td>Sinaas-Waas</td>
-            <td class="text-right">
-              $23,789
-            </td>
-          </tr>
-
-          <tr>
-            <td>3</td>
-            <td>Sage Rodriguez</td>
-            <td>Netherlands</td>
-            <td>Baileux</td>
-            <td class="text-right">
-              $56,142
-            </td>
-          </tr>
-
-          <tr>
-            <td>4</td>
-            <td>Philip Chaney</td>
-            <td>Korea, South</td>
-            <td>Overland Park</td>
-            <td class="text-right">
-              $38,735
-            </td>
-          </tr>
-
-          <tr>
-            <td>5</td>
-            <td>Doris Greene</td>
-            <td>Malawi</td>
-            <td>Feldkirchen in Kärnten</td>
-            <td class="text-right">
-              $63,542
-            </td>
-          </tr>
-
-          <tr>
-            <td>6</td>
-            <td>Mason Porter</td>
-            <td>Chile</td>
-            <td>Gloucester</td>
-            <td class="text-right">
-              $78,615
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </base-material-card>
   </v-container>
 </template>
+
+<script>
+  import { mapState } from 'vuex'
+  import { getInstance, delInstance } from '@/api'
+  export default {
+    name: 'InstanceTable',
+    components: {
+      ExecutionsTable: () => import('./ExecutionsTable'),
+    },
+    data () {
+      return {
+        instances: [],
+        instCols: ['Ref', 'Name', 'Created on', 'Modified on', '# of executions', 'Actions'],
+      }
+    },
+    computed: {
+      ...mapState(['url', 'user']),
+    },
+    methods: {
+      loadData () {
+        getInstance(this.url, this.user.token)
+          .then(response => {
+            if (response !== null) {
+              this.instances = response
+            }
+            this.instances.forEach(function (element) {
+              element.contentVisible = false
+            })
+          })
+      },
+      checkInst (i, inst) {
+        inst.contentVisible = !inst.contentVisible & inst.executions.length > 0
+        this.$set(this.instances, i, inst)
+      },
+      editInstance (i, inst) {
+        console.log('Editing instance with id: ' + inst.reference_id)
+      },
+      deleteInstance (i, inst) {
+        console.log('Deleting instance with id: ' + inst.reference_id)
+        delInstance(this.url, this.user.token, inst.reference_id)
+          .then(() => {
+            this.instances.splice(i, 1)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      },
+    },
+  }
+</script>
