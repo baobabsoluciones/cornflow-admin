@@ -142,9 +142,19 @@
           to: '/components/notifications',
         },
         {
-          title: 'Main',
+          title: 'List',
           icon: 'mdi-bell',
           to: '/components/instances',
+        },
+        {
+          title: 'New Instance',
+          icon: 'mdi-bell',
+          to: '/components/load-instance',
+        },
+        {
+          title: 'New Execution',
+          icon: 'mdi-bell',
+          to: '/components/start-execution',
         },
       ],
     }),

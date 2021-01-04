@@ -56,11 +56,22 @@ export default new Router({
           path: 'upgrade',
           component: () => import('@/views/dashboard/Upgrade'),
         },
-        // main
+        // manage instances and executions
         {
           name: 'Instances',
           path: 'components/instances',
           component: () => import('@/views/dashboard/main/InstanceMenu'),
+        },
+        // send instances
+        {
+          name: 'Load an instance',
+          path: 'components/load-instance',
+          component: () => import('@/views/dashboard/new/NewInstance'),
+        },
+        {
+          name: 'Start an execution',
+          path: 'components/start-execution',
+          component: () => import('@/views/dashboard/new/NewExecution'),
         },
       ],
     },

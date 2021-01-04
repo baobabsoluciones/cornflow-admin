@@ -19,7 +19,7 @@
         value="Submit"
         color="success"
         class="mr-0"
-        v-on:click="loadData"
+        @click="loadData"
       >
       Update!
       </v-btn>
@@ -39,9 +39,10 @@
           <template
             v-for="(inst,i) in instances"
           >
+          <!-- TODO: change to collapsible cards -->
             <tr
-              @click="checkInst(i, inst)"
               :key="i"
+              @click="checkInst(i, inst)"
             >
               <td>{{ inst.reference_id }}</td>
               <td>{{ inst.name }}</td>
@@ -74,7 +75,7 @@
               <td :colspan="5">
                 <div class="accordian-body">
                   <executions-table
-                    :instanceId="i"
+                    :instance-id="i"
                     :executions="inst.executions"
                     v-if="inst.contentVisible"
                   >
@@ -86,7 +87,14 @@
         </tbody>
       </v-simple-table>
     </base-material-card>
-
+    <v-alert
+      v-model="alertShow"
+      dense
+      :type="alertType"
+      dismissible
+    >
+      "{{ alertText }}"
+    </v-alert>
     <div class="py-3" />
 
   </v-container>
@@ -104,21 +112,32 @@
       return {
         instances: [],
         instCols: ['Ref', 'Name', 'Created on', 'Modified on', '# of executions', 'Actions'],
+        alertText: '',
+        alertShow: false,
+        alertType: 'success',
       }
     },
     computed: {
       ...mapState(['url', 'user']),
     },
+    mounted () { this.loadData() },
     methods: {
       loadData () {
         getInstance(this.url, this.user.token)
           .then(response => {
             if (response !== null) {
               this.instances = response
+              this.instances.forEach(function (element) {
+                element.contentVisible = false
+              })
+              this.alertShow = true
+              this.alertText = 'Instances loaded.'
+              this.alertType = 'success'
+            } else {
+              this.alertShow = true
+              this.alertText = 'You need to login first.'
+              this.alertType = 'error'
             }
-            this.instances.forEach(function (element) {
-              element.contentVisible = false
-            })
           })
       },
       checkInst (i, inst) {
@@ -133,9 +152,15 @@
         delInstance(this.url, this.user.token, inst.reference_id)
           .then(() => {
             this.instances.splice(i, 1)
+            this.alertShow = true
+            this.alertText = 'Instance ' + inst.reference_id + ' was deleted succesfully.'
+            this.alertType = 'success'
           })
           .catch((error) => {
             console.log(error)
+            this.alertShow = true
+            this.alertText = 'There was an error deleting the instance ' + inst.reference_id + '.'
+            this.alertType = 'error'
           })
       },
     },

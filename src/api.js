@@ -30,7 +30,10 @@ const signin = async (url, username, password) => {
       }
   }
 
-const getApi = async (url, token, api, id = null, method = 'GET') => {
+  /* TODO: check this works with data */
+  /* add to headers:
+  'Content-Type': 'multipart/form-data' */
+const getApi = async (url, token, api, id = null, method = 'GET', data = null, form = null) => {
     if (token === null) {
       console.log('Login first!')
       return null
@@ -39,18 +42,24 @@ const getApi = async (url, token, api, id = null, method = 'GET') => {
     if (id !== null) {
         finalURL += id + '/'
     }
-    /* let body = null
-    if (method !== 'GET') {
-      body = JSON.stringify('')
-    } */
+    const headers = {
+      Authorization: 'access_token ' + token,
+    }
+    if (data !== null) {
+      headers['Content-Type'] = 'application/json'
+    }
+    if (form !== null) {
+      headers['Content-Type'] = 'multipart/form-data'
+    }
     const response = await fetch(finalURL, {
         method: method,
-        headers: {
-            Authorization: 'access_token ' + token,
-        },
+        headers: headers,
+        body: data,
         })
         if (response.ok) {
+          if (response.status === 200) {
             return response.json()
+          }
         } else {
             throw new Error('Server returned ' + response.status + '   ' + response.statusText)
         }
@@ -64,6 +73,14 @@ const delInstance = async (url, token, id) => {
     return await getApi(url, token, 'instance', id, 'DELETE')
 }
 
+const newInstance = async (url, token, data) => {
+  return await getApi(url, token, 'instance', null, 'POST', JSON.stringify({ data: data }))
+}
+
+const newInstanceFile = async (url, token, formData) => {
+  return await getApi(url, token, 'instance', null, 'POST', formData)
+}
+
 const getExecution = async (url, token, id) => {
     return await getApi(url, token, 'execution', id)
 }
@@ -72,12 +89,19 @@ const delExecution = async (url, token, id) => {
   return await getApi(url, token, 'execution', id, 'DELETE')
 }
 
+const newExecution = async (url, token, config, instanceId) => {
+  return await getApi(url, token, 'execution', null, 'POST', JSON.stringify({ config: config, instance: instanceId }))
+}
+
   export {
     getApi,
     signin,
     signup,
     getInstance,
     delInstance,
+    newInstance,
+    newInstanceFile,
     getExecution,
     delExecution,
+    newExecution,
   }
