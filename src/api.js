@@ -1,3 +1,4 @@
+/* TODO: change to the codeblocks zip style */
 const signin = async (url, username, password) => {
     const data = { email: username, password: password }
     const response = await fetch(url + '/login/', {
@@ -30,9 +31,6 @@ const signin = async (url, username, password) => {
       }
   }
 
-  /* TODO: check this works with data */
-  /* add to headers:
-  'Content-Type': 'multipart/form-data' */
 const getApi = async (url, token, api, id = null, method = 'GET', data = null, form = null) => {
     if (token === null) {
       console.log('Login first!')
@@ -61,7 +59,7 @@ const getApi = async (url, token, api, id = null, method = 'GET', data = null, f
             return response.json()
           }
         } else {
-            throw new Error('Server returned ' + response.status + '   ' + response.statusText)
+          throw new Error('Server returned ' + response.status + ' ' + response.statusText)
         }
 }
 

@@ -46,8 +46,8 @@
             >
               <td>{{ inst.reference_id }}</td>
               <td>{{ inst.name }}</td>
-              <td>{{ inst.created_at }}</td>
-              <td>{{ inst.modified_at }}</td>
+              <td>{{ inst.created_at | moment }}</td>
+              <td>{{ inst.modified_at | moment }}</td>
               <td>{{ inst.executions.length }}</td>
               <td
                 class="justify-center layout px-0"
@@ -88,12 +88,12 @@
       </v-simple-table>
     </base-material-card>
     <v-alert
-      v-model="alertShow"
+      v-model="alert.show"
       dense
-      :type="alertType"
+      :type="alert.type"
       dismissible
     >
-      "{{ alertText }}"
+      "{{ alert.text }}"
     </v-alert>
     <div class="py-3" />
 
@@ -101,6 +101,7 @@
 </template>
 
 <script>
+  import moment from 'moment'
   import { mapState } from 'vuex'
   import { getInstance, delInstance } from '@/api'
   export default {
@@ -112,13 +113,20 @@
       return {
         instances: [],
         instCols: ['Ref', 'Name', 'Created on', 'Modified on', '# of executions', 'Actions'],
-        alertText: '',
-        alertShow: false,
-        alertType: 'success',
+        alert: {
+          text: '',
+          show: false,
+          type: 'success',
+        },
       }
     },
     computed: {
       ...mapState(['url', 'user']),
+    },
+    filters: {
+      moment: function (date) {
+        return moment(date).fromNow()
+      },
     },
     mounted () { this.loadData() },
     methods: {
@@ -126,17 +134,14 @@
         getInstance(this.url, this.user.token)
           .then(response => {
             if (response !== null) {
-              this.instances = response
-              this.instances.forEach(function (element) {
-                element.contentVisible = false
+              this.instances = response.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
+              this.instances.forEach(function (instance) {
+                instance.contentVisible = false
+                instance.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               })
-              this.alertShow = true
-              this.alertText = 'Instances loaded.'
-              this.alertType = 'success'
+              this.alert = { show: true, text: 'Instances loaded.', type: 'success' }
             } else {
-              this.alertShow = true
-              this.alertText = 'You need to login first.'
-              this.alertType = 'error'
+              this.alert = { show: true, text: 'You need to login first.', type: 'error' }
             }
           })
       },
@@ -152,15 +157,11 @@
         delInstance(this.url, this.user.token, inst.reference_id)
           .then(() => {
             this.instances.splice(i, 1)
-            this.alertShow = true
-            this.alertText = 'Instance ' + inst.reference_id + ' was deleted succesfully.'
-            this.alertType = 'success'
+            this.alert = { show: true, text: 'Instance ' + inst.reference_id + ' was deleted succesfully.', type: 'success' }
           })
           .catch((error) => {
             console.log(error)
-            this.alertShow = true
-            this.alertText = 'There was an error deleting the instance ' + inst.reference_id + '.'
-            this.alertType = 'error'
+            this.alert = { show: true, text: 'There was an error deleting the instance ' + inst.reference_id + '.', type: 'error' }
           })
       },
     },
