@@ -21,7 +21,7 @@
           <td>{{ exec.config.solver }}</td>
           <td>{{ exec.config.timeLimit }}</td>
           <td>{{ exec.created_at | moment }}</td>
-          <td>{{ exec.finished }}</td>
+          <td>{{ exec.finished ? "OK" : "NOK" }}</td>
           <td
           class="justify-center layout px-0"
           >

@@ -73,6 +73,11 @@ export default new Router({
           path: 'components/start-execution',
           component: () => import('@/views/dashboard/new/NewExecution'),
         },
+        {
+          name: 'Show execution log',
+          path: 'components/log-execution',
+          component: () => import('@/views/dashboard/solution/ShowSolution'),
+        },
       ],
     },
   ],

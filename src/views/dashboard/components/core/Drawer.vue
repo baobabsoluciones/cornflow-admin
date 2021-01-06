@@ -156,6 +156,11 @@
           icon: 'mdi-bell',
           to: '/components/start-execution',
         },
+        {
+          title: 'Show Execution',
+          icon: 'mdi-bell',
+          to: '/components/log-execution',
+        },
       ],
     }),
 
