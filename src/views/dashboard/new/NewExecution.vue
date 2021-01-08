@@ -25,7 +25,7 @@
     />
     <p>Paste a pulp json format for a solver configuration and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
     <send-json
-      :default-value="{ solver: 'CBC', timeLimit: 10 }"
+      :default-value="{ solver: 'PULP_CBC_CMD', timeLimit: 10 }"
       :submitted="submitted"
       :error="error"
       @submit-json="submitJson"
