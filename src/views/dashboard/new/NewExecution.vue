@@ -62,7 +62,7 @@
         /* newExecution(this.url, this.user.token, json) */
       },
       submitJson (json) {
-        console.log('Sending json to API')
+        console.log('Sending json to API for instance ' + this.value)
         newExecution(this.url, this.user.token, json, this.value)
           .then((response) => {
             if (response !== null) {
@@ -83,7 +83,7 @@
               this.items = response.map(function (element) {
                 return {
                   name: element.name + ' @ ' + element.created_at,
-                  value: element.reference_id,
+                  value: element.id,
                 }
               })
             }

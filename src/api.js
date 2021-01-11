@@ -72,7 +72,7 @@ const delInstance = async (url, token, id) => {
 }
 
 const newInstance = async (url, token, data) => {
-  return await getApi(url, token, 'instance', null, 'POST', JSON.stringify({ data: data }))
+  return await getApi(url, token, 'instance', null, 'POST', JSON.stringify({ data: data, name: data.parameters.name }))
 }
 
 const newInstanceFile = async (url, token, formData) => {
@@ -88,7 +88,7 @@ const delExecution = async (url, token, id) => {
 }
 
 const newExecution = async (url, token, config, instanceId) => {
-  return await getApi(url, token, 'execution', null, 'POST', JSON.stringify({ config: config, instance: instanceId }))
+  return await getApi(url, token, 'execution', null, 'POST', JSON.stringify({ config: config, instance_id: instanceId, name: 'test' }))
 }
 
   export {
