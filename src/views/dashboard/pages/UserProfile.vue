@@ -23,7 +23,6 @@
           <v-form @submit.prevent="onSubmit">
             <v-container class="py-0">
               <v-row>
-
                 <v-col
                   cols="12"
                   md="4"
@@ -72,8 +71,8 @@
                   class="text-right"
                 >
                   <v-btn
-                  type="submit"
-                  value="Submit"
+                    type="submit"
+                    value="Submit"
                     color="success"
                     class="mr-0"
                   >
@@ -84,6 +83,22 @@
             </v-container>
           </v-form>
         </base-material-card>
+        <v-alert
+          :value="submitted"
+          dense
+          type="success"
+          dismissible
+        >
+          Your login was successful!
+        </v-alert>
+        <v-alert
+          :value="error"
+          dense
+          type="error"
+          dismissible
+        >
+          There was an error and your login was unsuccessful.
+        </v-alert>
       </v-col>
 
       <v-col
@@ -125,6 +140,16 @@
   import { mapMutations } from 'vuex'
   import { signin } from '@/api'
   export default {
+    props: {
+      submitted: {
+        type: Boolean,
+        default: false,
+      },
+      error: {
+        type: Boolean,
+        default: false,
+      },
+    },
     data () {
       return {
         corn: '',
@@ -158,9 +183,15 @@
               token: token,
             }
             this.setUserInfo(userInfo)
+            if (response !== null) {
+              this.error = false
+              this.submitted = true
+            }
           })
           .catch(err => {
             console.log(err)
+            this.submitted = false
+            this.error = true
           })
       },
     },

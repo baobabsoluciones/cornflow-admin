@@ -8,6 +8,7 @@
       <v-jsoneditor
         v-model="json"
         :options="options"
+        height="290px"
         @error="onError"
       />
       <v-btn
@@ -27,9 +28,9 @@
       <div class="large-12 medium-12 small-12 cell">
         <label>File
           <input
-            type="file"
             id="file"
             ref="file"
+            type="file"
             @change="handleFileUpload"
           />
         </label>

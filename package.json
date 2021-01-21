@@ -13,10 +13,13 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "autoprefixer": "^9.8.0",
+    "colorette": "^1.2.0",
     "core-js": "^3.6.2",
     "d3": "^6.3.1",
     "material-design-icons-iconfont": "^6.1.0",
     "moment": "^2.24.0",
+    "react-scripts": "^3.4.1",
     "v-jsoneditor": "^1.4.2",
     "vue": "^2.6.11",
     "vue-i18n": "^8.15.3",

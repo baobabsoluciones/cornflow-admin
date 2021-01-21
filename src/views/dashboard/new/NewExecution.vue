@@ -4,6 +4,9 @@
     fluid
     tag="section"
   >
+    <base-v-component
+      heading="Start an execution"
+    />
     <v-btn
       type="submit"
       value="Submit"
@@ -13,15 +16,15 @@
     >
       Fill list
     </v-btn>
-    <p>Choose an instance to solve from the dropdown list:</p>
+    <p></p>
     <v-autocomplete
       v-model="value"
       :items="items"
       item-text="name"
       item-value="value"
-    />
-    <base-v-component
-      heading="Start an execution"
+      filled
+      outlined
+      label="Choose an instance to solve from the list"
     />
     <p>Paste a pulp json format for a solver configuration and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
     <send-json
