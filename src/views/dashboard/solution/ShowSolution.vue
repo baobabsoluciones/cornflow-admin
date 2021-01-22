@@ -91,11 +91,11 @@
 <script>
   import { mapState } from 'vuex'
   import { getInstance } from '@/api'
-  // import ProgressLineChart from './LineGraph'
+  import ProgressLineChart from './LineGraph'
   export default {
     name: 'ShowExecution',
     components: {
-      // ProgressLineChart,
+      ProgressLineChart,
     },
     data () {
       return {
