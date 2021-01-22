@@ -35,7 +35,7 @@
           color="info"
           icon="mdi-trophy-outline"
           title="Best solution"
-          :value="this.best_solution"
+          :value="best_solution"
         />
       </v-col>
 
@@ -48,7 +48,7 @@
           color="red"
           icon="mdi-poll"
           title="Best bound"
-          :value="this.best_bound"
+          :value="best_bound"
         />
       </v-col>
 
@@ -62,7 +62,7 @@
           icon="mdi-slash-forward"
           icon-height="199"
           title="Gap (%)"
-          :value="this.gap"
+          :value="gap"
         />
       </v-col>
 
@@ -75,15 +75,15 @@
           color="orange"
           icon="mdi-timer-sand-empty"
           title="Time (s)"
-          :value="this.time"
+          :value="time"
         />
       </v-col>
     </v-row>
-    <!-- <p>Original message: "{{ selectedLog }}"</p> -->
-    <!-- <progress-line-chart
+    <p>Original message: "{{ selectedLog }}"</p>
+    <progress-line-chart
       :options="{ width: 800, height: 180 }"
       :dataset="dataset"
-    ></progress-line-chart> -->
+    ></progress-line-chart>
     <div class="py-3" />
   </v-container>
 </template>
@@ -97,30 +97,16 @@
     components: {
       // ProgressLineChart,
     },
-    props: {
-      best_solution: {
-        type: Number,
-        default: 0,
-      },
-      best_bound: {
-        type: Number,
-        default: 0,
-      },
-      gap: {
-        type: Number,
-        default: 0,
-      },
-      time: {
-        type: Number,
-        default: 0,
-      },
-    },
     data () {
       return {
         selectedInst: null,
         selectedEx: null,
         instances: [],
         executions: [],
+        best_solution: 0,
+        best_bound: 0,
+        gap: 0,
+        time: 0,
       }
     },
     computed: {

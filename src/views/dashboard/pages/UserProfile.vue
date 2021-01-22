@@ -84,20 +84,12 @@
           </v-form>
         </base-material-card>
         <v-alert
-          :value="submitted"
+          v-model="alert.show"
           dense
-          type="success"
+          :type="alert.type"
           dismissible
         >
-          Your login was successful!
-        </v-alert>
-        <v-alert
-          :value="error"
-          dense
-          type="error"
-          dismissible
-        >
-          There was an error and your login was unsuccessful.
+          "{{ alert.text }}"
         </v-alert>
       </v-col>
 
@@ -155,6 +147,11 @@
         corn: '',
         user: '',
         pwd: '',
+        alert: {
+          text: '',
+          show: false,
+          type: 'success',
+        },
       }
     },
     mounted () {
@@ -184,14 +181,13 @@
             }
             this.setUserInfo(userInfo)
             if (response !== null) {
-              this.error = false
-              this.submitted = true
+              this.alert = { show: true, text: 'Your login was successful!', type: 'success' }
             }
           })
           .catch(err => {
             console.log(err)
-            this.submitted = false
-            this.error = true
+            console.log(err)
+            this.alert = { show: true, text: 'There was an error and your login was unsuccessful.', type: 'error' }
           })
       },
     },
