@@ -48,19 +48,19 @@
     data: () => ({
       links: [
         {
-          href: '#',
+          href: 'https://baobabsoluciones.es/',
           text: 'baobab soluciones',
         },
         {
-          href: '#',
+          href: 'https://baobabsoluciones.es/quienes-somos/',
           text: 'About Us',
         },
         {
-          href: '#',
+          href: 'https://baobabsoluciones.es/blog/',
           text: 'Blog',
         },
         {
-          href: '#',
+          href: 'https://baobabsoluciones.es/trabaja-con-nosotros/',
           text: 'Work for us',
         },
       ],

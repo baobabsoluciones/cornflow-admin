@@ -143,22 +143,22 @@
         },
         {
           title: 'List',
-          icon: 'mdi-bell',
+          icon: 'mdi-format-list-bulleted',
           to: '/components/instances',
         },
         {
           title: 'New Instance',
-          icon: 'mdi-bell',
+          icon: 'mdi-file-send-outline',
           to: '/components/load-instance',
         },
         {
           title: 'New Execution',
-          icon: 'mdi-bell',
+          icon: 'mdi-play-circle-outline',
           to: '/components/start-execution',
         },
         {
           title: 'Show Execution',
-          icon: 'mdi-bell',
+          icon: 'mdi-chart-bell-curve',
           to: '/components/log-execution',
         },
       ],

@@ -23,7 +23,6 @@
           <v-form @submit.prevent="onSubmit">
             <v-container class="py-0">
               <v-row>
-
                 <v-col
                   cols="12"
                   md="4"
@@ -72,8 +71,8 @@
                   class="text-right"
                 >
                   <v-btn
-                  type="submit"
-                  value="Submit"
+                    type="submit"
+                    value="Submit"
                     color="success"
                     class="mr-0"
                   >
@@ -84,6 +83,14 @@
             </v-container>
           </v-form>
         </base-material-card>
+        <v-alert
+          v-model="alert.show"
+          dense
+          :type="alert.type"
+          dismissible
+        >
+          "{{ alert.text }}"
+        </v-alert>
       </v-col>
 
       <v-col
@@ -130,6 +137,11 @@
         corn: '',
         user: '',
         pwd: '',
+        alert: {
+          text: '',
+          show: false,
+          type: 'success',
+        },
       }
     },
     mounted () {
@@ -158,9 +170,14 @@
               token: token,
             }
             this.setUserInfo(userInfo)
+            if (response !== null) {
+              this.alert = { show: true, text: 'Your login was successful!', type: 'success' }
+            }
           })
           .catch(err => {
             console.log(err)
+            console.log(err)
+            this.alert = { show: true, text: 'There was an error and your login was unsuccessful.', type: 'error' }
           })
       },
     },
