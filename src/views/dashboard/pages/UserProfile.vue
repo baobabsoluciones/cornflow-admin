@@ -132,16 +132,6 @@
   import { mapMutations } from 'vuex'
   import { signin } from '@/api'
   export default {
-    props: {
-      submitted: {
-        type: Boolean,
-        default: false,
-      },
-      error: {
-        type: Boolean,
-        default: false,
-      },
-    },
     data () {
       return {
         corn: '',
