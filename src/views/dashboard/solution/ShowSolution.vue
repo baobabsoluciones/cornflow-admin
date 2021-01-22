@@ -123,15 +123,12 @@
         if (this.selectedLog.progress === undefined) {
           return []
         }
-        console.log(this.selectedLog)
         const progress = this.selectedLog.progress
         /* const bound = progress.CutsBestBound.map((el) => Number(el))
         const objective = progress.BestInteger.map((el) => Number(el)) */
         /* TODO: workaround because there is an issue with cornflow...: */
         /* a.substring(2, a.length-2).split("', '").map(Number) */
         const treatColumn = (col) => col.substring(2, col.length - 2).split("', '").map(Number)
-
-        console.log(progress)
 
         const bound = treatColumn(progress.CutsBestBound)
         const objective = treatColumn(progress.BestInteger)
