@@ -44,14 +44,22 @@
                   class="mx-0"
                   @click="editUser(i, user)"
                 >
-                  <v-icon color="teal">edit</v-icon>
+                  <v-icon
+                    color="teal"
+                  >
+                    edit
+                  </v-icon>
                 </v-btn>
                 <v-btn
                   icon
                   class="mx-0"
                   @click="deleteUser(i, user)"
                 >
-                  <v-icon color="pink">delete</v-icon>
+                  <v-icon
+                    color="pink"
+                  >
+                    delete
+                  </v-icon>
                 </v-btn>
               </td>
             </tr>
@@ -68,7 +76,6 @@
       "{{ alert.text }}"
     </v-alert>
     <div class="py-3" />
-
   </v-container>
 </template>
 
@@ -77,6 +84,11 @@
   import API from '../../../api/index'
   export default {
     name: 'UserTable',
+    filters: {
+      moment: function (date) {
+        return moment(date).fromNow()
+      },
+    },
     data () {
       return {
         users: [],
@@ -88,10 +100,15 @@
         },
       }
     },
-    filters: {
-      moment: function (date) {
-        return moment(date).fromNow()
-      },
+    deleteUser (i, user) {
+      const text = 'User ' + user.email + ' was deleted successfully.'
+      console.log(text)
+      this.alert = { show: true, text: text, type: 'success' }
+    },
+    editUser (i, user) {
+      const text = 'User ' + user.email + ' was edited successfully.'
+      console.log(text)
+      this.alert = { show: true, text: text, type: 'success' }
     },
     mounted () { this.loadData() },
     methods: {
@@ -105,16 +122,6 @@
               this.alert = { show: true, text: 'Users loaded.', type: 'success' }
             }
           })
-      },
-      deleteUser (i, user) {
-        const text = 'User ' + user.email + ' was deleted successfully.'
-        console.log(text)
-        this.alert = { show: true, text: text, type: 'success' }
-      },
-      editUser (i, user) {
-        const text = 'User ' + user.email + ' was edited successfully.'
-        console.log(text)
-        this.alert = { show: true, text: text, type: 'success' }
       },
     },
   }
