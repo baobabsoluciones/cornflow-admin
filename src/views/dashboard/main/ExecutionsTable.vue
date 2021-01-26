@@ -17,7 +17,7 @@
         v-for="(exec,e) in executions"
         :key="e"
         >
-          <td>{{ exec.reference_id }}</td>
+          <td>{{ exec.id }}</td>
           <td>{{ exec.config.solver }}</td>
           <td>{{ exec.config.timeLimit }}</td>
           <td>{{ exec.created_at | moment }}</td>
@@ -57,8 +57,7 @@
 
 <script>
   import moment from 'moment'
-  import { mapState } from 'vuex'
-  import { delExecution } from '@/api'
+  import API from '../../../api/index'
   export default {
     name: 'ExecutionTable',
     props: {
@@ -79,9 +78,6 @@
         },
       }
     },
-    computed: {
-      ...mapState(['url', 'user']),
-    },
     filters: {
       moment: function (date) {
         return moment(date).fromNow()
@@ -89,18 +85,22 @@
     },
     methods: {
       editExecution (i, exec, instanceId) {
-        console.log('Editing execution: ' + exec.reference_id)
+        console.log('Editing execution: ' + exec.id)
       },
       deleteExecution (i, exec, instanceId) {
-        console.log('Deleting execution: ' + exec.reference_id)
-        delExecution(this.url, this.user.token, exec.reference_id)
-          .then(() => {
-            this.executions.splice(i, 1)
-            this.alert = { show: true, text: 'Execution ' + exec.reference_id + ' was deleted succesfully.', type: 'success' }
+        console.log('Deleting execution: ' + exec.id)
+        API.execution.delete(exec.id)
+          .then((response) => {
+            if (response.status === 200) {
+              this.executions.splice(i, 1)
+              this.alert = { show: true, text: 'Execution ' + exec.id + ' was deleted succesfully.', type: 'success' }
+            } else {
+              this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.id + '.', type: 'error' }
+            }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.reference_id + '.', type: 'error' }
+            this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.id + '.', type: 'error' }
           })
       },
     },

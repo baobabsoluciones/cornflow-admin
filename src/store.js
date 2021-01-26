@@ -11,8 +11,7 @@ export default new Vuex.Store({
     url: 'http://127.0.0.1:5000',
     user: {
       email: 'some_email@gmail.com',
-      pwd: 'some_password',
-      token: null,
+      name: '',
     },
   },
   mutations: {
@@ -24,8 +23,7 @@ export default new Vuex.Store({
     },
     SET_USER (state, payload) {
       state.user.email = payload.user
-      state.user.pwd = payload.pwd
-      state.user.token = payload.token
+      state.user.name = payload.name
     },
   },
   actions: {

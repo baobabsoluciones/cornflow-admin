@@ -78,6 +78,11 @@ export default new Router({
           path: 'components/log-execution',
           component: () => import('@/views/dashboard/solution/ShowSolution'),
         },
+        {
+          name: 'User management',
+          path: 'components/users',
+          component: () => import('@/views/dashboard/users/AllUsers'),
+        },
       ],
     },
   ],

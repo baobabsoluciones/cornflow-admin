@@ -44,7 +44,7 @@
               :key="i"
               @click="checkInst(i, inst)"
             >
-              <td>{{ inst.reference_id }}</td>
+              <td>{{ inst.id }}</td>
               <td>{{ inst.name }}</td>
               <td>{{ inst.created_at | moment }}</td>
               <td>{{ inst.modified_at | moment }}</td>
@@ -70,7 +70,7 @@
             </tr>
             <tr
               v-if="inst.contentVisible"
-              :key="inst.reference_id"
+              :key="inst.id"
             >
               <td :colspan="5">
                 <div class="accordian-body">
@@ -102,8 +102,7 @@
 
 <script>
   import moment from 'moment'
-  import { mapState } from 'vuex'
-  import { getInstance, delInstance } from '@/api'
+  import API from '../../../api/index'
   export default {
     name: 'InstanceTable',
     components: {
@@ -120,9 +119,6 @@
         },
       }
     },
-    computed: {
-      ...mapState(['url', 'user']),
-    },
     filters: {
       moment: function (date) {
         return moment(date).fromNow()
@@ -131,18 +127,22 @@
     mounted () { this.loadData() },
     methods: {
       loadData () {
-        getInstance(this.url, this.user.token)
+        API.instance.getAll()
           .then(response => {
-            if (response !== null) {
+            if ('error' in response) {
+              this.alert = { show: true, text: response.error, type: 'error' }
+            } else {
               this.instances = response.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               this.instances.forEach(function (instance) {
                 instance.contentVisible = false
                 instance.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               })
               this.alert = { show: true, text: 'Instances loaded.', type: 'success' }
-            } else {
-              this.alert = { show: true, text: 'You need to login first.', type: 'error' }
             }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.alert = { show: true, text: 'There was an error loading the instances: ' + error, type: 'error' }
           })
       },
       checkInst (i, inst) {
@@ -150,18 +150,18 @@
         this.$set(this.instances, i, inst)
       },
       editInstance (i, inst) {
-        console.log('Editing instance with id: ' + inst.reference_id)
+        console.log('Editing instance with id: ' + inst.id)
       },
       deleteInstance (i, inst) {
-        console.log('Deleting instance with id: ' + inst.reference_id)
-        delInstance(this.url, this.user.token, inst.reference_id)
+        console.log('Deleting instance with id: ' + inst.id)
+        API.instance.delete(inst.id)
           .then(() => {
             this.instances.splice(i, 1)
-            this.alert = { show: true, text: 'Instance ' + inst.reference_id + ' was deleted succesfully.', type: 'success' }
+            this.alert = { show: true, text: 'Instance ' + inst.id + ' was deleted succesfully.', type: 'success' }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error deleting the instance ' + inst.reference_id + '.', type: 'error' }
+            this.alert = { show: true, text: 'There was an error deleting the instance ' + inst.id + '.', type: 'error' }
           })
       },
     },

@@ -6,12 +6,16 @@ It comes from the following template: [Vuetify Material Dashboard](https://www.c
 
 Here, only the "getting started" remains. For more documentation, resources, etc. Go to the [original repository](https://github.com/creativetimofficial/vuetify-material-dashboard).
 
-## Getting Started
+## Installing
 
 - Install Nodejs from [Nodejs Official Page](https://nodejs.org/en/)
 - Open your terminal
 - Navigate to the project
 - Run `npm install` 
+
+## Running
+
+- Edit the `config.json` file to put the URL of the Cornflow server
 - Run `npm run dev` to start a local development server
 - A new tab will be opened in your browser
 

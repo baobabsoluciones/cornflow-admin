@@ -10,8 +10,6 @@
     <v-autocomplete
       v-model="selectedInst"
       :items="instances"
-      item-text="name"
-      item-value="value"
       filled
       outlined
       label="Choose an instance to watch from list"
@@ -19,8 +17,6 @@
     <v-autocomplete
       v-model="selectedEx"
       :items="executions"
-      item-text="name"
-      item-value="value"
       filled
       outlined
       label="Choose an execution to watch from list"
@@ -89,9 +85,8 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-  import { getInstance } from '@/api'
   import ProgressLineChart from './LineGraph'
+  import API from '../../../api/index'
   export default {
     name: 'ShowExecution',
     components: {
@@ -103,10 +98,10 @@
         selectedEx: null,
         instances: [],
         executions: [],
-        best_solution: 0,
-        best_bound: 0,
-        gap: 0,
-        time: 0,
+        best_solution: '0',
+        best_bound: '0',
+        gap: '0',
+        time: '0',
       }
     },
     computed: {
@@ -130,8 +125,16 @@
         /* a.substring(2, a.length-2).split("', '").map(Number) */
         const treatColumn = (col) => col.substring(2, col.length - 2).split("', '").map(Number)
 
-        const bound = treatColumn(progress.CutsBestBound)
-        const objective = treatColumn(progress.BestInteger)
+        let bound = []
+        let objective = []
+
+        try {
+          bound = treatColumn(progress.CutsBestBound)
+          objective = treatColumn(progress.BestInteger)
+        } catch (TypeError) {
+          bound = []
+          objective = []
+        }
 
         const formatData = []
         for (var i = 0; i < bound.length; i++) {
@@ -143,23 +146,22 @@
         }
         return formatData
       },
-      ...mapState(['url', 'user']),
     },
     mounted () { this.loadData() },
     methods: {
       loadData () {
-        getInstance(this.url, this.user.token)
+        API.instance.getAll()
           .then(response => {
             if (response !== null) {
               this.instances = response.map((inst, index) => {
                 return {
-                  name: inst.name + ' @ ' + inst.created_at,
+                  text: inst.name + ' @ ' + inst.created_at,
                   value: index,
                   executions: inst.executions
                     .filter((exec) => exec.finished)
                     .map((exec, i2) => {
                       return {
-                        name: exec.config.solver + ' + ' + exec.config.timeLimit + ' @ ' + exec.created_at,
+                        text: exec.config.solver + ' + ' + exec.config.timeLimit + ' @ ' + exec.created_at,
                         value: i2,
                         log: exec.log_json,
                       }
@@ -183,12 +185,16 @@
       },
       selectedEx: function (data) {
         if (this.selectedEx === null | this.selectedEx > this.executions.length) {
+          this.best_solution = '0'
+          this.best_bound = '0'
+          this.gap = '0'
+          this.time = '0'
           return null
         } else {
-          this.best_solution = Number(this.executions[data].log.best_solution).toFixed(0)
-          this.best_bound = Number(this.executions[data].log.best_bound).toFixed(0)
-          this.gap = Number(this.executions[data].log.gap).toFixed(2)
-          this.time = Number(this.executions[data].log.time).toFixed(2)
+          this.best_solution = Number(this.executions[data].log.best_solution).toFixed(0).toString()
+          this.best_bound = Number(this.executions[data].log.best_bound).toFixed(0).toString()
+          this.gap = Number(this.executions[data].log.gap).toFixed(2).toString()
+          this.time = Number(this.executions[data].log.time).toFixed(2).toString()
         }
       },
     },

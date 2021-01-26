@@ -44,20 +44,12 @@
       </div>
     </base-material-card>
     <v-alert
-      :value="submitted"
+      v-model="alert.show"
       dense
-      type="success"
+      :type="alert.type"
       dismissible
     >
-      The json was sent succesfully!
-    </v-alert>
-    <v-alert
-      :value="error"
-      dense
-      type="error"
-      dismissible
-    >
-      There was an error sending the json.
+      "{{ alert.text }}"
     </v-alert>
   </div>
 </template>
@@ -70,7 +62,7 @@
       VJsoneditor,
     },
     props: {
-      schema: {
+      inputSchema: {
         type: Object,
         required: false,
         default: null,
@@ -80,13 +72,9 @@
         required: false,
         default: () => { return { } },
       },
-      submitted: {
-        type: Boolean,
-        default: false,
-      },
-      error: {
-        type: Boolean,
-        default: false,
+      alert: {
+        type: Object,
+        default: () => ({ show: false, type: 'success', text: '' }),
       },
     },
     data () {
@@ -96,7 +84,7 @@
         options: {
           mode: 'code',
           modes: ['code', 'text', 'tree'],
-          /* TODO: validation through a schema: "", */
+          schema: this.inputSchema,
         },
       }
     },
@@ -105,10 +93,6 @@
         this.file = this.$refs.file.files[0]
       },
       submitFile () {
-        if (this.file === null) {
-          console.log('First upload a file!')
-          return
-        }
         this.$emit('submit-file', this.file)
       },
       onError () {
