@@ -80,10 +80,10 @@
       </v-col>
     </v-row>
     <p>Original message: "{{ selectedLog }}"</p>
-    <progress-line-chart
+    <!-- <progress-line-chart
       :options="{ width: 800, height: 180 }"
       :dataset="dataset"
-    ></progress-line-chart>
+    ></progress-line-chart> -->
     <div class="py-3" />
   </v-container>
 </template>
@@ -91,11 +91,11 @@
 <script>
   import { mapState } from 'vuex'
   import { getInstance } from '@/api'
-  import ProgressLineChart from './LineGraph'
+  // import ProgressLineChart from './LineGraph'
   export default {
     name: 'ShowExecution',
     components: {
-      ProgressLineChart,
+      // ProgressLineChart,
     },
     data () {
       return {

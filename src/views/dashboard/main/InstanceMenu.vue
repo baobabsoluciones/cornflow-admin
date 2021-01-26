@@ -21,7 +21,7 @@
         class="mr-0"
         @click="loadData"
       >
-      Update!
+        Update!
       </v-btn>
       <v-simple-table>
         <thead>
@@ -39,7 +39,7 @@
           <template
             v-for="(inst,i) in instances"
           >
-          <!-- TODO: change to collapsible cards -->
+            <!-- TODO: change to collapsible cards -->
             <tr
               :key="i"
               @click="checkInst(i, inst)"
@@ -57,7 +57,9 @@
                   class="mx-0"
                   @click="editInstance(i, inst)"
                 >
-                  <v-icon color="teal">edit</v-icon>
+                  <v-icon color="teal">
+                    edit
+                  </v-icon>
                 </v-btn>
                 <v-btn
                   icon
@@ -75,9 +77,9 @@
               <td :colspan="5">
                 <div class="accordian-body">
                   <executions-table
+                    v-if="inst.contentVisible"
                     :instance-id="i"
                     :executions="inst.executions"
-                    v-if="inst.contentVisible"
                   >
                   </executions-table>
                 </div>
@@ -134,11 +136,16 @@
         getInstance(this.url, this.user.token)
           .then(response => {
             if (response !== null) {
+              console.log(response)
               this.instances = response.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
+              console.log('ok0')
               this.instances.forEach(function (instance) {
+                console.log('ok1')
                 instance.contentVisible = false
                 instance.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               })
+              console.log('ok2')
+              console.log(this.instances)
               this.alert = { show: true, text: 'Instances loaded.', type: 'success' }
             } else {
               this.alert = { show: true, text: 'You need to login first.', type: 'error' }
@@ -153,15 +160,14 @@
         console.log('Editing instance with id: ' + inst.reference_id)
       },
       deleteInstance (i, inst) {
-        console.log('Deleting instance with id: ' + inst.reference_id)
-        delInstance(this.url, this.user.token, inst.reference_id)
+        delInstance(this.url, this.user.token, inst.id)
           .then(() => {
             this.instances.splice(i, 1)
-            this.alert = { show: true, text: 'Instance ' + inst.reference_id + ' was deleted succesfully.', type: 'success' }
+            this.alert = { show: true, text: 'Instance ' + inst.name + ' was deleted succesfully.', type: 'success' }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error deleting the instance ' + inst.reference_id + '.', type: 'error' }
+            this.alert = { show: true, text: 'There was an error deleting the instance ' + inst.name + '.', type: 'error' }
           })
       },
     },

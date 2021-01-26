@@ -24,14 +24,14 @@ export default new Router({
           component: () => import('@/views/dashboard/pages/UserProfile'),
         },
         {
+          name: 'User Modal',
+          path: 'pages/usermodal',
+          component: () => import('@/views/dashboard/pages/UserModal'),
+        },
+        {
           name: 'Notifications',
           path: 'components/notifications',
           component: () => import('@/views/dashboard/component/Notifications'),
-        },
-        {
-          name: 'Icons',
-          path: 'components/icons',
-          component: () => import('@/views/dashboard/component/Icons'),
         },
         {
           name: 'Typography',
@@ -43,12 +43,6 @@ export default new Router({
           name: 'Regular Tables',
           path: 'tables/regular-tables',
           component: () => import('@/views/dashboard/tables/RegularTables'),
-        },
-        // Maps
-        {
-          name: 'Google Maps',
-          path: 'maps/google-maps',
-          component: () => import('@/views/dashboard/maps/GoogleMaps'),
         },
         // Upgrade
         {
