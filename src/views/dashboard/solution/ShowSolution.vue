@@ -23,63 +23,34 @@
     />
     <v-row>
       <v-col
+        v-for="(stat,i) in stats_names"
+        :key="i"
         cols="12"
         sm="6"
         lg="3"
       >
         <base-material-stats-card
-          color="info"
-          icon="mdi-trophy-outline"
-          title="Best solution"
-          :value="best_solution"
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="red"
-          icon="mdi-poll"
-          title="Best bound"
-          :value="best_bound"
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="success"
-          icon="mdi-slash-forward"
-          icon-height="199"
-          title="Gap (%)"
-          :value="gap"
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="orange"
-          icon="mdi-timer-sand-empty"
-          title="Time (s)"
-          :value="time"
+          :color="stat.color"
+          :icon="stat.icon"
+          :title="stat.title"
+          :value="stats[stat.name]"
         />
       </v-col>
     </v-row>
-    <p>Original message: "{{ selectedLog }}"</p>
+    <p>Original message: "{{ log }}"</p>
     <!-- <progress-line-chart
       :options="{ width: 800, height: 180 }"
       :dataset="dataset"
     ></progress-line-chart> -->
+    <div class="py-3" />
+    <v-alert
+      v-model="alert.show"
+      dense
+      :type="alert.type"
+      dismissible
+    >
+      "{{ alert.text }}"
+    </v-alert>
     <div class="py-3" />
   </v-container>
 </template>
@@ -98,27 +69,35 @@
         selectedEx: null,
         instances: [],
         executions: [],
-        best_solution: '0',
-        best_bound: '0',
-        gap: '0',
-        time: '0',
+        stats_names: [
+          { name: 'best_solution', title: 'Best solution', icon: 'mdi-trophy-outline', color: 'info' },
+          { name: 'best_bound', title: 'Best Bound', icon: 'mdi-poll', color: 'red' },
+          { name: 'gap', title: 'Gap (%)', icon: 'mdi-slash-forward', color: 'success' },
+          { name: 'time', title: 'Time (s)', icon: 'mdi-timer-sand-empty', color: 'orange' },
+        ],
+        stats: {
+          best_solution: '',
+          best_bound: '',
+          gap: '',
+          time: '',
+        },
+        log: null,
+        alert: {
+          text: '',
+          show: false,
+          type: 'success',
+        },
       }
     },
     computed: {
-      selectedLog: function () {
-        if (this.selectedEx === null | this.selectedEx > this.executions.length) {
-          return null
-        }
-        return this.executions[this.selectedEx].log
-      },
       dataset: function () {
-        if (this.selectedLog === null) {
+        if (this.log === null) {
           return []
         }
-        if (this.selectedLog.progress === undefined) {
+        if (this.log.progress === undefined) {
           return []
         }
-        const progress = this.selectedLog.progress
+        const progress = this.log.progress
         /* const bound = progress.CutsBestBound.map((el) => Number(el))
         const objective = progress.BestInteger.map((el) => Number(el)) */
         /* TODO: workaround because there is an issue with cornflow...: */
@@ -155,17 +134,9 @@
             if (response !== null) {
               this.instances = response.map((inst, index) => {
                 return {
+                  id: inst.id,
                   text: inst.name + ' @ ' + inst.created_at,
                   value: index,
-                  executions: inst.executions
-                    .filter((exec) => exec.finished)
-                    .map((exec, i2) => {
-                      return {
-                        text: exec.config.solver + ' + ' + exec.config.timeLimit + ' @ ' + exec.created_at,
-                        value: i2,
-                        log: exec.log_json,
-                      }
-                    }),
                 }
               })
             }
@@ -174,11 +145,40 @@
     },
     watch: {
       selectedInst: function (data) {
+        console.log(data)
         this.selectedEx = null
         if (data === null) {
           this.executions = []
         }
-        this.executions = this.instances[data].executions
+        this.stats = {
+          best_solution: '',
+          best_bound: '',
+          gap: '',
+          time: '',
+        }
+        API.instance.getOne(this.instances[data].id)
+          .then((response) => {
+            if ('error' in response) {
+              this.alert = { show: true, text: 'There was an error loading executions.', type: 'error' }
+            } else {
+              this.executions = response.executions
+                .filter((exec) => exec.finished)
+                .map((exec, i2) => {
+                  return {
+                    id: exec.id,
+                    text: exec.config.solver + ' + ' + exec.config.timeLimit + ' @ ' + exec.created_at,
+                    value: i2,
+                    log: exec.log_json,
+                  }
+                })
+              this.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
+              this.alert = { show: true, text: 'Executions loaded.', type: 'success' }
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.alert = { show: true, text: 'There was an error loading executions.', type: 'error' }
+          })
         if (this.executions.length > 0) {
           this.selectedEx = null
         }
@@ -191,10 +191,28 @@
           this.time = '0'
           return null
         } else {
-          this.best_solution = Number(this.executions[data].log.best_solution).toFixed(0).toString()
-          this.best_bound = Number(this.executions[data].log.best_bound).toFixed(0).toString()
-          this.gap = Number(this.executions[data].log.gap).toFixed(2).toString()
-          this.time = Number(this.executions[data].log.time).toFixed(2).toString()
+          API.execution.getOneDetail(this.executions[this.selectedEx].id, 'log')
+            .then((response) => {
+              console.log(response)
+              if ('error' in response) {
+                this.alert = { show: true, text: 'There was an error loading the execution log.', type: 'error' }
+              } else {
+                this.alert = { show: true, text: 'Log executions loaded.', type: 'success' }
+                this.log = response.log
+                for (var i = 0; i < this.stats_names.length; i++) {
+                  const stat = this.stats_names[i].name
+                  this.stats[stat] = this.log[stat]
+                }
+                /* this.best_solution = Number(this.log.best_solution).toFixed(0).toString()
+                this.best_bound = Number(this.log.best_bound).toFixed(0).toString()
+                this.gap = Number(this.log.gap).toFixed(2).toString()
+                this.time = Number(this.log.time).toFixed(2).toString() */
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+              this.alert = { show: true, text: 'There was an error loading execution log', type: 'error' }
+            })
         }
       },
     },
