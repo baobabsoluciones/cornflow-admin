@@ -48,6 +48,23 @@
 
                 <v-col
                   cols="12"
+                  md="6"
+                >
+                  <v-text-field
+                    v-model="name"
+                    label="First Name"
+                    class="purple-input"
+                  />
+                </v-col>
+
+                <v-col
+                  cols="12"
+                  md="6"
+                >
+                </v-col>
+
+                <v-col
+                  cols="12"
                   class="text-right"
                 >
                   <v-btn
@@ -62,6 +79,15 @@
               </v-row>
             </v-container>
           </v-form>
+          <v-btn
+            type="submit"
+            value="Submit"
+            color="success"
+            class="mr-0"
+            @click="onSignup"
+          >
+          Signup
+          </v-btn>
         </base-material-card>
         <v-alert
           v-model="alert.show"
@@ -78,13 +104,13 @@
 
 <script>
   import { mapMutations } from 'vuex'
-  import { signin } from '@/api'
+  import API from '../../../api/index'
   export default {
     data () {
       return {
-        corn: '',
         user: '',
         pwd: '',
+        name: '',
         alert: {
           text: '',
           show: false,
@@ -94,11 +120,10 @@
     },
     mounted () {
       const state = this.$store.state
-      this.corn = state.url
       const fromState = state.user
       if (fromState) {
         this.user = fromState.email
-        this.pwd = fromState.pwd
+        this.name = fromState.name
       }
     },
     methods: {
@@ -106,16 +131,30 @@
         setUserInfo: 'SET_USER',
       }),
       onSubmit () {
-        const user = this.user
-        const pwd = this.pwd
-        signin(this.corn, user, pwd)
+        API.signin(this.user, this.pwd)
           .then(response => {
-            console.log(response)
-            const token = response.token
+            localStorage.setItem('token', response.token)
+            /* TODO: update once the PR is done */
+            /* API.user.getOne(this.user).then(response => {
+              this.name = response.name
+              this.setUserInfo({ user: response.email, name: response.name })
+            }) */
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      },
+      onSignup () {
+        API.signup(this.user, this.pwd, this.name)
+          .then(response => {
+            if ('error' in response) {
+              console.log(response.error)
+              return
+            }
+            localStorage.setItem('token', response.token)
             const userInfo = {
               user: this.user,
-              pwd: this.pwd,
-              token: token,
+              name: this.name,
             }
             this.setUserInfo(userInfo)
             if (response !== null) {

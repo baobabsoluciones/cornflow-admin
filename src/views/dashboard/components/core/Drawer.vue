@@ -151,6 +151,11 @@
           icon: 'mdi-chart-bell-curve',
           to: '/components/log-execution',
         },
+        {
+          title: 'Manage Users',
+          icon: 'mdi-bell',
+          to: '/components/users',
+        },
       ],
     }),
 

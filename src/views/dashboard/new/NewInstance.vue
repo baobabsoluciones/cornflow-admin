@@ -9,9 +9,9 @@
     />
     <p>Paste a pulp json format for an instance and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
     <send-json
-      :defaultValue="defaultJson"
-      :submitted="submitted"
-      :error="error"
+      :default-value="defaultJson"
+      :alert="alert"
+      :input-schema="pulpJsonSchema"
       @submit-json="submitJson"
       @submit-file="submitForm"
     />
@@ -21,8 +21,8 @@
 
 <script>
   import defaultJsonData from './default_pulp.json'
-  import { mapState } from 'vuex'
-  import { newInstanceFile, newInstance } from '@/api'
+  import pulpJsonSchema from './pulp_json_schema.json'
+  import API from '../../../api/index'
   import SendJson from './SendJson'
   export default {
     name: 'NewInstance',
@@ -34,32 +34,61 @@
         defaultJson: defaultJsonData,
         submitted: false,
         error: false,
+        pulpJsonSchema: pulpJsonSchema,
+        alert: {
+          text: '',
+          show: false,
+          type: 'success',
+        },
       }
-    },
-    computed: {
-      ...mapState(['url', 'user']),
     },
     methods: {
       submitForm (file) {
+        console.log(file)
+        if (file === null) {
+          console.log('First upload a file!')
+          this.alert = { show: true, text: 'You need to add a file first!', type: 'error' }
+          return
+        }
         const formData = new FormData()
+        /* TODO: add name and description fields and map them */
         /* TODO: check the file has good format */
-        formData.append('file', this.file)
+        /* console.log(file) */
+        formData.append('file', file)
+        formData.append('name', 'instance567')
+        formData.append('description', '')
         console.log('Sending file to API')
-        newInstanceFile(this.url, this.user.token, formData)
-      },
-      submitJson (json) {
-        console.log('Sending json to API')
-        newInstance(this.url, this.user.token, json)
+        /* console.log(formData) */
+        API.instancefile.create(formData)
           .then((response) => {
-            if (response !== null) {
-              this.error = false
-              this.submitted = true
+            if ('error' in response) {
+              this.alert = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', type: 'error' }
+            } else {
+              this.alert = { show: true, text: 'Instance created successfuly.', type: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.submitted = false
-            this.error = true
+            this.alert = { show: true, text: 'There was an error creating the instance: ' + '.', type: 'error' }
+          })
+      },
+      submitJson (json) {
+        console.log('Sending json to API')
+        /* TODO: add name and description fields and map them */
+        const data = { data: json, name: 'instance123', description: '' }
+        /* const payload = JSON.stringify(data) */
+        API.instance.create(data, { 'Content-Type': 'application/json' })
+          .then((response) => {
+            /* console.log(response) */
+            if ('error' in response) {
+              this.alert = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', type: 'error' }
+            } else {
+              this.alert = { show: true, text: 'Instance created successfuly.', type: 'success' }
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.alert = { show: true, text: 'There was an error creating the instance.', type: 'error' }
           })
       },
     },

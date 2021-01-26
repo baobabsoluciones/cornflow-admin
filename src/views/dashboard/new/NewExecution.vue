@@ -29,18 +29,15 @@
     <p>Paste a pulp json format for a solver configuration and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
     <send-json
       :default-value="{ solver: 'PULP_CBC_CMD', timeLimit: 10 }"
-      :submitted="submitted"
-      :error="error"
+      :alert="alert"
       @submit-json="submitJson"
-      @submit-file="submitForm"
     />
     <div class="py-3" />
   </v-container>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-  import { newExecution, getInstance } from '@/api'
+  import API from '../../../api/index'
   import SendJson from './SendJson'
   export default {
     name: 'NewExecution',
@@ -51,45 +48,50 @@
       return {
         value: null,
         items: [],
-        submitted: false,
-        error: false,
+        alert: {
+          text: '',
+          show: false,
+          type: 'success',
+        },
       }
-    },
-    computed: {
-      ...mapState(['url', 'user']),
     },
     mounted () { this.loadData() },
     methods: {
-      submitForm (file) {
-        /* TODO: parse file into json */
-        /* newExecution(this.url, this.user.token, json) */
-      },
       submitJson (json) {
-        console.log('Sending json to API for instance ' + this.value)
-        newExecution(this.url, this.user.token, json, this.value)
+        console.log('Sending execution json to API for instance ' + this.value)
+        /* TODO: add name and description fields and map them */
+        if (this.value === null) {
+          this.alert = { show: true, text: 'You need to select an instance first!', type: 'error' }
+        }
+        const data = { config: json, instance_id: this.value, name: 'execution12', description: '' }
+        API.execution.create(data, { 'Content-Type': 'application/json' })
           .then((response) => {
-            if (response !== null) {
-              this.error = false
-              this.submitted = true
+            console.log(response)
+            if ('error' in response) {
+              this.alert = { show: true, text: 'There was an error creating the execution: ' + response.error + '.', type: 'error' }
+            } else {
+              this.alert = { show: true, text: 'Execution created successfuly.', type: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.submitted = false
-            this.error = true
+            this.alert = { show: true, text: 'There was an error creating the execution: ' + error + '.', type: 'error' }
           })
       },
       loadData () {
-        getInstance(this.url, this.user.token)
+        API.instance.getAll()
           .then(response => {
-            if (response !== null) {
-              this.items = response.map(function (element) {
-                return {
-                  name: element.name + ' @ ' + element.created_at,
-                  value: element.id,
-                }
-              })
+            console.log(response)
+            if ('error' in response) {
+              this.alert = { show: true, text: response.error, type: 'error' }
+              return
             }
+            this.items = response.map(function (element) {
+              return {
+                name: element.name + ' @ ' + element.created_at,
+                value: element.id,
+              }
+            })
           })
       },
     },
