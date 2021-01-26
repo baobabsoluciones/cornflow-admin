@@ -5,6 +5,8 @@ export const makeResourceWithClient = client => resourceName => {
 
   const getOne = id => client.get(`/${resourceName}/${id}/`)
 
+  const getOneDetail = (id, detail) => client.get(`/${resourceName}/${id}/${detail}/`)
+
   const del = id => client.delete(`/${resourceName}/${id}/`)
 
   const create = (data, headers = {}) => client.post(`/${resourceName}/`, data, headers)
@@ -14,6 +16,7 @@ export const makeResourceWithClient = client => resourceName => {
     getOne,
     delete: del,
     create,
+    getOneDetail,
   }
 }
 

@@ -48,7 +48,7 @@
               <td>{{ inst.name }}</td>
               <td>{{ inst.created_at | moment }}</td>
               <td>{{ inst.modified_at | moment }}</td>
-              <td>{{ inst.executions.length }}</td>
+              <!-- <td>{{ inst.executions.length }}</td> -->
               <td
                 class="justify-center layout px-0"
               >
@@ -75,8 +75,7 @@
               <td :colspan="5">
                 <div class="accordian-body">
                   <executions-table
-                    :instance-id="i"
-                    :executions="inst.executions"
+                    :instance-id="inst.id"
                     v-if="inst.contentVisible"
                   >
                   </executions-table>
@@ -111,7 +110,7 @@
     data () {
       return {
         instances: [],
-        instCols: ['Ref', 'Name', 'Created on', 'Modified on', '# of executions', 'Actions'],
+        instCols: ['Ref', 'Name', 'Created on', 'Modified on', 'Actions'],
         alert: {
           text: '',
           show: false,
@@ -135,7 +134,6 @@
               this.instances = response.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               this.instances.forEach(function (instance) {
                 instance.contentVisible = false
-                instance.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               })
               this.alert = { show: true, text: 'Instances loaded.', type: 'success' }
             }
@@ -146,7 +144,7 @@
           })
       },
       checkInst (i, inst) {
-        inst.contentVisible = !inst.contentVisible & inst.executions.length > 0
+        inst.contentVisible = !inst.contentVisible
         this.$set(this.instances, i, inst)
       },
       editInstance (i, inst) {

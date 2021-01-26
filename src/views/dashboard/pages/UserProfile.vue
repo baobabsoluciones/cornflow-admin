@@ -166,11 +166,10 @@
         API.signin(this.user, this.pwd)
           .then(response => {
             localStorage.setItem('token', response.token)
-            /* TODO: update once the PR is done */
-            /* API.user.getOne(this.user).then(response => {
+            API.user.getOne(this.user).then(response => {
               this.name = response.name
               this.setUserInfo({ user: response.email, name: response.name })
-            }) */
+            })
           })
           .catch(err => {
             console.log(err)
