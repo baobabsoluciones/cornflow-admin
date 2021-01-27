@@ -131,7 +131,7 @@
               return
             }
             localStorage.setItem('token', response.token)
-            API.user.getOne(this.user).then(response => {
+            API.user.getOne(response.id).then(response => {
               this.name = response.name
               this.setUserInfo({ user: response.email, name: response.name })
             })
