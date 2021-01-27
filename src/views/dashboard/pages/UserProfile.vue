@@ -60,8 +60,7 @@
                 <v-col
                   cols="12"
                   md="6"
-                >
-                </v-col>
+                />
 
                 <v-col
                   cols="12"
@@ -86,7 +85,7 @@
             class="mr-0"
             @click="onSignup"
           >
-          Signup
+            Signup
           </v-btn>
         </base-material-card>
         <v-alert
@@ -97,38 +96,6 @@
         >
           "{{ alert.text }}"
         </v-alert>
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="4"
-      >
-        <base-material-card
-          class="v-card-profile"
-          avatar="https://demos.creative-tim.com/vue-material-dashboard/img/marc.aba54d65.jpg"
-        >
-          <v-card-text class="text-center">
-            <h6 class="display-1 mb-1 grey--text">
-              CEO / CO-FOUNDER
-            </h6>
-
-            <h4 class="display-2 font-weight-light mb-3 black--text">
-              Alec Thompson
-            </h4>
-
-            <p class="font-weight-light grey--text">
-              Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-            </p>
-
-            <v-btn
-              color="success"
-              rounded
-              class="mr-0"
-            >
-              Follow
-            </v-btn>
-          </v-card-text>
-        </base-material-card>
       </v-col>
     </v-row>
   </v-container>
@@ -166,7 +133,7 @@
         API.signin(this.user, this.pwd)
           .then(response => {
             localStorage.setItem('token', response.token)
-            API.user.getOne(this.user).then(response => {
+            API.user.getOne(response.id).then(response => {
               this.name = response.name
               this.setUserInfo({ user: response.email, name: response.name })
             })
@@ -193,7 +160,6 @@
             }
           })
           .catch(err => {
-            console.log(err)
             console.log(err)
             this.alert = { show: true, text: 'There was an error and your login was unsuccessful.', type: 'error' }
           })
