@@ -34,8 +34,11 @@
               :key="i"
             >
               <td>{{ user.id }}</td>
+              <td>{{ user.email }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.created_at | moment }}</td>
+              <td>{{ user.admin }}</td>
+              <td>{{ user.super_admin }}</td>
               <td
                 class="justify-center layout px-0"
               >
@@ -80,7 +83,7 @@
     data () {
       return {
         users: [],
-        columnNames: ['ID', 'Name', 'Created at'],
+        columnNames: ['ID', 'Email', 'Name', 'Created at', 'admin?', 'superAdmin?'],
         alert: {
           text: '',
           show: false,
@@ -107,14 +110,19 @@
           })
       },
       deleteUser (i, user) {
-        const text = 'User ' + user.email + ' was deleted successfully.'
-        console.log(text)
-        this.alert = { show: true, text: text, type: 'success' }
+        console.log('Deleting user with id: ' + user.id)
+        API.user.delete(user.email)
+          .then(() => {
+            this.users.splice(i, 1)
+            this.alert = { show: true, text: 'User ' + user.id + ' was deleted succesfully.', type: 'success' }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.alert = { show: true, text: 'There was an error deleting the user ' + user.id + '.', type: 'error' }
+          })
       },
       editUser (i, user) {
-        const text = 'User ' + user.email + ' was edited successfully.'
-        console.log(text)
-        this.alert = { show: true, text: text, type: 'success' }
+        console.log('Editing user with id: ' + user.id)
       },
     },
   }

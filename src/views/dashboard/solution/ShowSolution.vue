@@ -145,7 +145,6 @@
     },
     watch: {
       selectedInst: function (data) {
-        console.log(data)
         this.selectedEx = null
         if (data === null) {
           this.executions = []
@@ -193,7 +192,6 @@
         } else {
           API.execution.getOneDetail(this.executions[this.selectedEx].id, 'log')
             .then((response) => {
-              console.log(response)
               if ('error' in response) {
                 this.alert = { show: true, text: 'There was an error loading the execution log.', type: 'error' }
               } else {
@@ -201,12 +199,8 @@
                 this.log = response.log
                 for (var i = 0; i < this.stats_names.length; i++) {
                   const stat = this.stats_names[i].name
-                  this.stats[stat] = this.log[stat]
+                  this.stats[stat] = this.log[stat].toString()
                 }
-                /* this.best_solution = Number(this.log.best_solution).toFixed(0).toString()
-                this.best_bound = Number(this.log.best_bound).toFixed(0).toString()
-                this.gap = Number(this.log.gap).toFixed(2).toString()
-                this.time = Number(this.log.time).toFixed(2).toString() */
               }
             })
             .catch((error) => {
