@@ -66,7 +66,6 @@
         const data = { config: json, instance_id: this.value, name: 'execution12', description: '' }
         API.execution.create(data, { 'Content-Type': 'application/json' })
           .then((response) => {
-            console.log(response)
             if ('error' in response) {
               this.alert = { show: true, text: 'There was an error creating the execution: ' + response.error + '.', type: 'error' }
             } else {
@@ -81,7 +80,6 @@
       loadData () {
         API.instance.getAll()
           .then(response => {
-            console.log(response)
             if ('error' in response) {
               this.alert = { show: true, text: response.error, type: 'error' }
               return

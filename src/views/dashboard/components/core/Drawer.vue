@@ -117,21 +117,6 @@
           to: '/pages/user',
         },
         {
-          title: 'rtables',
-          icon: 'mdi-clipboard-outline',
-          to: '/tables/regular-tables',
-        },
-        {
-          title: 'typography',
-          icon: 'mdi-format-font',
-          to: '/components/typography',
-        },
-        {
-          title: 'notifications',
-          icon: 'mdi-bell',
-          to: '/components/notifications',
-        },
-        {
           title: 'List',
           icon: 'mdi-format-list-bulleted',
           to: '/components/instances',
@@ -153,7 +138,7 @@
         },
         {
           title: 'Manage Users',
-          icon: 'mdi-bell',
+          icon: 'mdi-account',
           to: '/components/users',
         },
       ],
