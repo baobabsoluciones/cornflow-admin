@@ -60,8 +60,7 @@
                 <v-col
                   cols="12"
                   md="6"
-                >
-                </v-col>
+                />
 
                 <v-col
                   cols="12"
@@ -86,7 +85,7 @@
             class="mr-0"
             @click="onSignup"
           >
-          Signup
+            Signup
           </v-btn>
         </base-material-card>
         <v-alert
@@ -161,7 +160,6 @@
             }
           })
           .catch(err => {
-            console.log(err)
             console.log(err)
             this.alert = { show: true, text: 'There was an error and your login was unsuccessful.', type: 'error' }
           })

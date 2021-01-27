@@ -106,111 +106,6 @@
       </v-list>
     </v-menu>
 
-    <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      to="/pages/user"
-    >
-      <v-icon>mdi-account</v-icon>
-    </v-btn>
-
-    <div class="text-center">
-      <!-- <v-dialog
-        v-model="dialog"
-        width="500"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            text
-            class="ml-2"
-            min-width="0"
-            overlap
-            elevation=0
-            v-on="on"
-          >
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-        </template>
-
-        <base-material-card>
-          <template v-slot:heading>
-            <div class="display-2 font-weight-light">
-              Edit Profile
-            </div>
-
-            <div class="subtitle-1 font-weight-light">
-              Complete your profile
-            </div>
-          </template>
-
-          <v-form @submit.prevent="onSubmit">
-            <v-container class="py-0">
-              <v-row>
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <v-text-field
-                    v-model="user"
-                    class="purple-input"
-                    label="User Name"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="4"
-                >
-                  <v-text-field
-                    v-model="pwd"
-                    label="Password"
-                    class="purple-input"
-                    type="password"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="6"
-                >
-                  <v-text-field
-                    v-model="name"
-                    label="Name"
-                    class="purple-input"
-                  />
-                </v-col>
-
-                <v-col
-                  cols="12"
-                  md="10"
-                >
-                  <v-btn
-                    type="submit"
-                    value="Submit"
-                    color="success"
-                    class="text-right"
-                  >
-                    Login
-                  </v-btn>
-
-                  <v-btn
-                    type="submit"
-                    value="Submit"
-                    color="success"
-                    class="text-left"
-                    @click="onSignup"
-                  >
-                  Signup
-                  </v-btn>
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
-        </base-material-card>
-      </v-dialog> -->
-    </div>
-
     <v-menu
       close-on-click
       transition="slide-y-transition"
@@ -231,6 +126,7 @@
         <v-list-item
           v-for="(item, index) in menuUserItems"
           :key="index"
+          @click.stop="showModal(item.id)"
         >
           <v-list-item-title>
             <v-btn
@@ -243,6 +139,12 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <user-modal-s
+      v-model="showUserModalS"
+    />
+    <user-modal-l
+      v-model="showUserModalL"
+    />
   </v-app-bar>
 </template>
 
@@ -251,9 +153,13 @@
   import { VHover, VListItem } from 'vuetify/lib'
   // Utilities
   import { mapState, mapMutations } from 'vuex'
+  import UserModalS from '../../pages/UserModalS'
+  import UserModalL from '../../pages/UserModalL'
   export default {
     name: 'DashboardCoreAppBar',
     components: {
+      UserModalS,
+      UserModalL,
       AppBarItem: {
         render (h) {
           return h(VHover, {
@@ -293,10 +199,11 @@
         'Another one',
       ],
       menuUserItems: [
-        { title: 'LogIn' },
-        { title: 'EditProfile' },
+        { title: 'Log In', id: '1' },
+        { title: 'Sign Up', id: '2' },
       ],
-      dialog: false,
+      showUserModalS: false,
+      showUserModalL: false,
     }),
     computed: {
       ...mapState(['drawer']),
@@ -305,6 +212,13 @@
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
       }),
+      showModal (bmenu) {
+        if (bmenu === '1') {
+          this.showUserModalL = true
+        } else if (bmenu === '2') {
+          this.showUserModalS = true
+        }
+      },
     },
   }
 </script>

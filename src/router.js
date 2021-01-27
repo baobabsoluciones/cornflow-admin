@@ -24,11 +24,6 @@ export default new Router({
           component: () => import('@/views/dashboard/pages/UserProfile'),
         },
         {
-          name: 'User Modal',
-          path: 'pages/usermodal',
-          component: () => import('@/views/dashboard/pages/UserModal'),
-        },
-        {
           name: 'Notifications',
           path: 'components/notifications',
           component: () => import('@/views/dashboard/component/Notifications'),
