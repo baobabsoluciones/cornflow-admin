@@ -145,6 +145,12 @@
     <user-modal-l
       v-model="showUserModalL"
     />
+    <test-modal
+      v-model="showEditModal"
+      :fields="modalList"
+      title="Title test"
+      @submit-form="loginSubmit"
+    />
   </v-app-bar>
 </template>
 
@@ -155,11 +161,14 @@
   import { mapState, mapMutations } from 'vuex'
   import UserModalS from '../../pages/UserModalS'
   import UserModalL from '../../pages/UserModalL'
+  import TestModal from '../../pages/EditModal'
+  import API from '../../../../api/index'
   export default {
     name: 'DashboardCoreAppBar',
     components: {
       UserModalS,
       UserModalL,
+      TestModal,
       AppBarItem: {
         render (h) {
           return h(VHover, {
@@ -191,6 +200,10 @@
       },
     },
     data: () => ({
+      modalList: [
+        { name: 'user', label: 'Username', default: '' },
+        { name: 'pwd', label: 'Password', default: '' },
+      ],
       notifications: [
         'Mike John Responded to your email',
         'You have 5 new tasks',
@@ -201,9 +214,11 @@
       menuUserItems: [
         { title: 'Log In', id: '1' },
         { title: 'Sign Up', id: '2' },
+        { title: 'Test', id: '3' },
       ],
       showUserModalS: false,
       showUserModalL: false,
+      showEditModal: false,
     }),
     computed: {
       ...mapState(['drawer']),
@@ -211,13 +226,38 @@
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
+        setUserInfo: 'SET_USER',
       }),
       showModal (bmenu) {
         if (bmenu === '1') {
           this.showUserModalL = true
         } else if (bmenu === '2') {
           this.showUserModalS = true
+        } else if (bmenu === '3') {
+          this.showEditModal = true
         }
+      },
+      loginSubmit (payload) {
+        /* console.log(payload.user.value)
+        console.log(payload.pwd.value) */
+        API.signin(payload.user.value, payload.pwd.value)
+          .then(response => {
+            if ('error' in response) {
+              /* this.snack = { show: true, text: 'There was an error and your login was unsuccessful.', color: 'red' } */
+              return
+            }
+            localStorage.setItem('token', response.token)
+            API.user.getOne(response.id).then(response => {
+              this.name = response.name
+              this.setUserInfo({ user: response.email, name: response.name })
+            })
+            /* this.snack = { show: true, text: 'Your login was successful!', color: 'success' } */
+            /* setTimeout(() => { this.show = false }, this.timeout) */
+          })
+          .catch(err => {
+            console.log(err)
+            /* this.snack = { show: true, text: 'There was an error and your login was unsuccessful.', color: 'red' } */
+          })
       },
     },
   }
