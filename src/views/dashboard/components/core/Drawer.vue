@@ -112,11 +112,6 @@
           to: '/',
         },
         {
-          icon: 'mdi-account',
-          title: 'user',
-          to: '/pages/user',
-        },
-        {
           title: 'List',
           icon: 'mdi-format-list-bulleted',
           to: '/components/instances',

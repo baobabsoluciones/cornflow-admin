@@ -106,28 +106,60 @@
       </v-list>
     </v-menu>
 
-    <v-btn
-      class="ml-2"
-      min-width="0"
-      text
-      to="/pages/user"
+    <v-menu
+      close-on-click
+      transition="slide-y-transition"
     >
-      <v-icon>mdi-account</v-icon>
-    </v-btn>
+      <template v-slot:activator="{ on }">
+        <v-btn
+          text
+          class="ml-2"
+          min-width="0"
+          overlap
+          elevation="0"
+          v-on="on"
+        >
+          <v-icon>mdi-account</v-icon>
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in menuUserItems"
+          :key="index"
+          @click.stop="showModal(item.id)"
+        >
+          <v-list-item-title>
+            <v-btn
+              block
+              color="white"
+            >
+              {{ item.title }}
+            </v-btn>
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <user-modal-s
+      v-model="showUserModalS"
+    />
+    <user-modal-l
+      v-model="showUserModalL"
+    />
   </v-app-bar>
 </template>
 
 <script>
   // Components
   import { VHover, VListItem } from 'vuetify/lib'
-
   // Utilities
   import { mapState, mapMutations } from 'vuex'
-
+  import UserModalS from '../../pages/UserModalS'
+  import UserModalL from '../../pages/UserModalL'
   export default {
     name: 'DashboardCoreAppBar',
-
     components: {
+      UserModalS,
+      UserModalL,
       AppBarItem: {
         render (h) {
           return h(VHover, {
@@ -152,14 +184,12 @@
         },
       },
     },
-
     props: {
       value: {
         type: Boolean,
         default: false,
       },
     },
-
     data: () => ({
       notifications: [
         'Mike John Responded to your email',
@@ -168,16 +198,27 @@
         'Another Notification',
         'Another one',
       ],
+      menuUserItems: [
+        { title: 'Log In', id: '1' },
+        { title: 'Sign Up', id: '2' },
+      ],
+      showUserModalS: false,
+      showUserModalL: false,
     }),
-
     computed: {
       ...mapState(['drawer']),
     },
-
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
       }),
+      showModal (bmenu) {
+        if (bmenu === '1') {
+          this.showUserModalL = true
+        } else if (bmenu === '2') {
+          this.showUserModalS = true
+        }
+      },
     },
   }
 </script>

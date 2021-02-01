@@ -47,14 +47,22 @@
                   class="mx-0"
                   @click="editUser(i, user)"
                 >
-                  <v-icon color="teal">edit</v-icon>
+                  <v-icon
+                    color="teal"
+                  >
+                    edit
+                  </v-icon>
                 </v-btn>
                 <v-btn
                   icon
                   class="mx-0"
                   @click="deleteUser(i, user)"
                 >
-                  <v-icon color="pink">delete</v-icon>
+                  <v-icon
+                    color="pink"
+                  >
+                    delete
+                  </v-icon>
                 </v-btn>
               </td>
             </tr>
@@ -71,7 +79,6 @@
       "{{ alert.text }}"
     </v-alert>
     <div class="py-3" />
-
   </v-container>
 </template>
 
@@ -80,6 +87,11 @@
   import API from '../../../api/index'
   export default {
     name: 'UserTable',
+    filters: {
+      moment: function (date) {
+        return moment(date).fromNow()
+      },
+    },
     data () {
       return {
         users: [],
@@ -90,11 +102,6 @@
           type: 'success',
         },
       }
-    },
-    filters: {
-      moment: function (date) {
-        return moment(date).fromNow()
-      },
     },
     mounted () { this.loadData() },
     methods: {

@@ -107,7 +107,7 @@
         API.execution.delete(exec.id)
           .then((response) => {
             if ('error' in response) {
-              this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.id + '.', type: 'error' }
+              this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.id + ': ' + response.error, type: 'error' }
             } else {
               this.executions.splice(i, 1)
               this.alert = { show: true, text: 'Execution ' + exec.id + ' was deleted succesfully.', type: 'success' }
@@ -115,7 +115,7 @@
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.id + '.', type: 'error' }
+            this.alert = { show: true, text: 'There was an error deleting the execution ' + exec.id + ':' + error, type: 'error' }
           })
       },
     },

@@ -38,10 +38,10 @@
       </v-col>
     </v-row>
     <p>Original message: "{{ log }}"</p>
-    <progress-line-chart
+    <!-- <progress-line-chart
       :options="{ width: 800, height: 180 }"
       :dataset="dataset"
-    ></progress-line-chart>
+    ></progress-line-chart> -->
     <div class="py-3" />
     <v-alert
       v-model="alert.show"
@@ -56,12 +56,12 @@
 </template>
 
 <script>
-  import ProgressLineChart from './LineGraph'
+  // import ProgressLineChart from './LineGraph'
   import API from '../../../api/index'
   export default {
     name: 'ShowExecution',
     components: {
-      ProgressLineChart,
+      // ProgressLineChart,
     },
     data () {
       return {
