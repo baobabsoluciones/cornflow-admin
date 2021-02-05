@@ -22,14 +22,16 @@ export const makeClient = ({ baseUrl = '' }) => {
 
   const post = (url, data = {}, headers = {}) => request(url, { method: 'POST', body: data, headers: headers })
 
+  const put = (url, data = {}) => request(url, { method: 'PUT', body: data })
+
   const del = (url, data = {}) => request(url, { method: 'DELETE', body: data })
 
-  const patch = (url, data = {}) =>
-    request(url, { method: 'PATCH', body: data })
+  const patch = (url, data = {}) => request(url, { method: 'PATCH', body: data })
 
   return {
     get,
     post,
+    put,
     delete: del,
     patch,
   }

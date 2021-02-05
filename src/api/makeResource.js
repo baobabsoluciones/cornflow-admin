@@ -11,12 +11,17 @@ export const makeResourceWithClient = client => resourceName => {
 
   const create = (data, headers = {}) => client.post(`/${resourceName}/`, data, headers)
 
+  const put = (id, data) => client.put(`/${resourceName}/${id}/`, data)
+
+// put
+
   return {
     getAll,
     getOne,
     delete: del,
     create,
     getOneDetail,
+    put,
   }
 }
 

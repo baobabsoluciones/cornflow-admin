@@ -25,6 +25,7 @@
                 :label="field.label"
                 :value="field.value"
                 :name="field.name"
+                :type="field.type"
               />
             </v-col>
           </v-row>
@@ -44,30 +45,13 @@
                 color="success"
                 class="ml-0"
               >
-                Log in
+                {{ buttonText }}
               </v-btn>
             </v-col>
           </v-row>
         </v-container>
       </v-form>
     </base-material-card>
-    <v-snackbar
-      v-model="snack.show"
-      :timeout="timeout"
-    >
-      {{ snack.text }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          :color="snack.color"
-          text
-          v-bind="attrs"
-          @click="snack.show=false"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
   </v-dialog>
 </template>
 
@@ -76,6 +60,10 @@
     props: {
       fields: Array,
       title: {
+        type: String,
+        default: '',
+      },
+      buttonText: {
         type: String,
         default: '',
       },
@@ -88,12 +76,6 @@
     },
     data () {
       return {
-        snack: {
-          show: false,
-          text: '',
-          color: 'red',
-        },
-        timeout: 2000,
       }
     },
     computed: {
