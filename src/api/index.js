@@ -1,32 +1,21 @@
 import makeResource from './makeResource'
+import login from './login'
 import config from '../config'
 
-/* TODO: improve this */
-const parseJSON = resp => resp.json()
-
-const signin = (username, password) =>
-  fetch(config.baseUrl + '/login/', {
+const instancefile = (data) =>
+  fetch(config.baseUrl + '/instancefile/', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      Authorization: 'access_token ' + localStorage.getItem('token'),
     },
-    body: JSON.stringify({ email: username, password: password }),
-  }).then(parseJSON)
-
-const signup = (username, password, name) =>
-  fetch(config.baseUrl + '/signup/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email: username, password: password, name: name }),
+    body: data,
   })
 
 export default {
-  signin,
-  signup,
+  signin: login.login,
+  signup: login.signup,
+  instancefile,
   user: makeResource('user'),
   instance: makeResource('instance'),
-  instancefile: makeResource('instancefile'),
   execution: makeResource('execution'),
 }

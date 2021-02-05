@@ -12,8 +12,8 @@ export const makeClient = ({ baseUrl = '' }) => {
     fetch(baseUrl + url, {
       ...options,
       headers: {
-        ...options.headers,
         ...getBaseHeaders(),
+        ...options.headers,
       },
       body: JSON.stringify(options.body),
     }).then(parseJSON)

@@ -37,11 +37,10 @@
         />
       </v-col>
     </v-row>
-    <p>Original message: "{{ log }}"</p>
-    <!-- <progress-line-chart
+    <progress-line-chart
       :options="{ width: 800, height: 180 }"
       :dataset="dataset"
-    ></progress-line-chart> -->
+    ></progress-line-chart>
     <div class="py-3" />
     <v-alert
       v-model="alert.show"
@@ -56,12 +55,12 @@
 </template>
 
 <script>
-  // import ProgressLineChart from './LineGraph'
+  import ProgressLineChart from './LineGraph'
   import API from '../../../api/index'
   export default {
     name: 'ShowExecution',
     components: {
-      // ProgressLineChart,
+      ProgressLineChart,
     },
     data () {
       return {
@@ -98,11 +97,7 @@
           return []
         }
         const progress = this.log.progress
-        /* const bound = progress.CutsBestBound.map((el) => Number(el))
-        const objective = progress.BestInteger.map((el) => Number(el)) */
-        /* TODO: workaround because there is an issue with cornflow...: */
-        /* a.substring(2, a.length-2).split("', '").map(Number) */
-        const treatColumn = (col) => col.substring(2, col.length - 2).split("', '").map(Number)
+        const treatColumn = (col) => col.map(Number)
 
         let bound = []
         let objective = []
@@ -161,7 +156,7 @@
               this.alert = { show: true, text: 'There was an error loading executions.', type: 'error' }
             } else {
               this.executions = response.executions
-                .filter((exec) => exec.finished)
+                .filter((exec) => exec.state === 1)
                 .map((exec, i2) => {
                   return {
                     id: exec.id,
