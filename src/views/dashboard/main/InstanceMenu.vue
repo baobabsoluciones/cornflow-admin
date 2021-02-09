@@ -198,7 +198,11 @@
         this.instEdit.description = payload.description.value
         console.log('Editing instance with id: ' + this.instEdit.id)
         this.showEditModal = false
-        API.instance.put(this.instEdit.id, { name: this.instEdit.name, description: this.instEdit.description })
+        API.instance.put(
+          this.instEdit.id,
+          { name: this.instEdit.name, description: this.instEdit.description },
+          { 'Content-Type': 'application/json' },
+        )
           .then((response) => {
             console.log(response)
             if ('error' in response) {

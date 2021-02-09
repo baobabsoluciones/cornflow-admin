@@ -11,7 +11,7 @@ export const makeResourceWithClient = client => resourceName => {
 
   const create = (data, headers = {}) => client.post(`/${resourceName}/`, data, headers)
 
-  const put = (id, data) => client.put(`/${resourceName}/${id}/`, data)
+  const put = (id, data, headers = {}) => client.put(`/${resourceName}/${id}/`, data, headers)
 
   return {
     getAll,
