@@ -198,9 +198,9 @@
         this.instEdit.description = payload.description.value
         console.log('Editing instance with id: ' + this.instEdit.id)
         this.showEditModal = false
-        console.log(this.instEdit.name)
-        API.instance.put(this.instEdit.id, { name: this.instEdit.name })
+        API.instance.put(this.instEdit.id, { name: this.instEdit.name, description: this.instEdit.description })
           .then((response) => {
+            console.log(response)
             if ('error' in response) {
               console.log(response.error)
               this.snack = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', color: 'error' }

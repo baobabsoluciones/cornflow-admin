@@ -43,14 +43,6 @@
         </v-btn>
       </div>
     </base-material-card>
-    <v-alert
-      v-model="alert.show"
-      dense
-      :type="alert.type"
-      dismissible
-    >
-      "{{ alert.text }}"
-    </v-alert>
   </div>
 </template>
 
@@ -71,10 +63,6 @@
         type: Object,
         required: false,
         default: () => { return { } },
-      },
-      alert: {
-        type: Object,
-        default: () => ({ show: false, type: 'success', text: '' }),
       },
     },
     data () {

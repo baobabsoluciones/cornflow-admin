@@ -159,14 +159,20 @@
         this.execEdit.description = payload.description.value
         console.log('Editing execution: ' + this.execEdit.id)
         this.showEditModal = false
-        // API.instance.put(this.execEdit)
-        //   .then(() => {
-        //     this.snack = { show: true, text: 'Instance ' + this.execEdit.id + ' was edited succesfully.', color: 'success' }
-        //   })
-        //   .catch((error) => {
-        //     console.log(error)
-        //     this.snack = { show: true, text: 'There was an error editing the execution ' + this.execEdit.id + '.', color: 'error' }
-        //   })
+        API.execution.put(this.execEdit.id, this.execEdit)
+          .then((response) => {
+            console.log(response)
+            if ('error' in response) {
+              console.log(response.error)
+              this.snack = { show: true, text: 'There was an error creating the execution: ' + response.error + '.', color: 'error' }
+            } else {
+              this.snack = { show: true, text: 'execution ' + this.execEdit.id + ' was edited succesfully.', color: 'success' }
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.snack = { show: true, text: 'There was an error editing the execution ' + this.execEdit.id + '.', color: 'error' }
+          })
       },
       deleteExecution (i, exec) {
         console.log('Deleting execution: ' + exec.id)

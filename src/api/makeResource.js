@@ -13,8 +13,6 @@ export const makeResourceWithClient = client => resourceName => {
 
   const put = (id, data) => client.put(`/${resourceName}/${id}/`, data)
 
-// put
-
   return {
     getAll,
     getOne,

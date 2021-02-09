@@ -10,12 +10,28 @@
     <p>Paste a pulp json format for an instance and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
     <send-json
       :default-value="defaultJson"
-      :alert="alert"
       :input-schema="pulpJsonSchema"
       @submit-json="submitJson"
       @submit-file="submitForm"
     />
     <div class="py-3" />
+    <v-snackbar
+      v-model="snack.show"
+      :timeout="timeout"
+    >
+      {{ snack.text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          :color="snack.color"
+          text
+          v-bind="attrs"
+          @click="snack.show=false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -35,11 +51,12 @@
         submitted: false,
         error: false,
         pulpJsonSchema: pulpJsonSchema,
-        alert: {
-          text: '',
+        snack: {
           show: false,
-          type: 'success',
+          text: '',
+          color: 'red',
         },
+        timeout: 2000,
       }
     },
     methods: {
@@ -47,7 +64,7 @@
         console.log(file)
         if (file === null) {
           console.log('First upload a file!')
-          this.alert = { show: true, text: 'You need to add a file first!', type: 'error' }
+          this.snack = { show: true, text: 'You need to add a file first!', color: 'error' }
           return
         }
         const formData = new FormData()
@@ -62,14 +79,14 @@
         API.instancefile.create(formData)
           .then((response) => {
             if ('error' in response) {
-              this.alert = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', type: 'error' }
+              this.snack = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', color: 'error' }
             } else {
-              this.alert = { show: true, text: 'Instance created successfuly.', type: 'success' }
+              this.snack = { show: true, text: 'Instance created successfuly.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error creating the instance: ' + '.', type: 'error' }
+            this.snack = { show: true, text: 'There was an error creating the instance: ' + error + '.', color: 'error' }
           })
       },
       submitJson (json) {
@@ -81,14 +98,14 @@
           .then((response) => {
             /* console.log(response) */
             if ('error' in response) {
-              this.alert = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', type: 'error' }
+              this.snack = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', color: 'error' }
             } else {
-              this.alert = { show: true, text: 'Instance created successfuly.', type: 'success' }
+              this.snack = { show: true, text: 'Instance created successfuly.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error creating the instance.', type: 'error' }
+            this.snack = { show: true, text: 'There was an error creating the instance: ' + error + '.', color: 'error' }
           })
       },
     },

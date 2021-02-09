@@ -274,6 +274,7 @@
                     this.setUserInfo({ user: response.email, name: response.name })
                   })
                   this.snack = { show: true, text: 'Your signin was successful and you are logged!', color: 'success' }
+                  this.showEditModal = false
                   this.accountIconColor = 'success'
                 })
                 .catch(err => {
