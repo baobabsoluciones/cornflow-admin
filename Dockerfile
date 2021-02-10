@@ -6,6 +6,7 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 # update npm and install vue
 RUN npm install npm -g
 RUN npm install -g @vue/cli@latest
+RUN npm i cache-loader -D
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
