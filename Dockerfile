@@ -1,7 +1,4 @@
-FROM node:15-alpine
-
-# update npm and install vue
-RUN npm install -g @vue/cli
+FROM node:12-alpine
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
