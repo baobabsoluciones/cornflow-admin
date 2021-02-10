@@ -1,12 +1,7 @@
 FROM node:15-alpine
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
-
 # update npm and install vue
-RUN npm install npm -g
-RUN npm install -g @vue/cli@latest
-RUN npm install -g cache-loader
+RUN npm install -g @vue/cli
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
@@ -19,7 +14,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # install deps
-RUN npm install --force
+RUN npm install
 
 # copy files and folder to workdir (/usr/src/app)
 COPY . .
