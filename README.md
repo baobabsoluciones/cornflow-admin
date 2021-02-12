@@ -15,7 +15,7 @@ Here, only the "getting started" remains. For more documentation, resources, etc
 
 ## Running
 
-- Edit the `config.json` file to put the URL of the Cornflow server
+- Edit the `.env` file to put the URL of the Cornflow server
 - Run `npm run dev` to start a local development server
 - A new tab will be opened in your browser
 
@@ -23,3 +23,8 @@ You can also run additional npm tasks such as
 - `npm run build` to build your app for production
 - `npm run lint` to run linting.
 
+## Docker
+
+- First build the image tagged as "cornflow-admin" with `docker build -t cornflow-admin .`
+- Run image in host port 8080 `docker run -p 8080:8080 -e CORNFLOW_URL=http://localhost:5000 cornflow-admin -d`. CORNFLOW_URL determine the url of cornflow app in your machine.
+- Alternative you can directly run the official dockerhub image `docker run -p 8080:8080 -e CORNFLOW_URL=http://localhost:5000 baobabsoluciones/cornflow-admin -d` 

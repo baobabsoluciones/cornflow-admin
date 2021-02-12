@@ -76,13 +76,12 @@
     },
     methods: {
       submitForm (file) {
-        console.log(file)
         if (file === null) {
           console.log('First upload a file!')
           this.snack = { show: true, text: 'You need to add a file first!', color: 'error' }
           return
         }
-        const formData = new FormData()
+        var formData = new FormData()
         /* TODO: add name and description fields and map them */
         /* TODO: check the file has good format */
         /* console.log(file) */
@@ -91,7 +90,7 @@
         formData.append('description', '')
         console.log('Sending file to API')
         /* console.log(formData) */
-        API.instancefile.create(formData)
+        API.instancefile(formData)
           .then((response) => {
             if ('error' in response) {
               this.snack = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', color: 'error' }
