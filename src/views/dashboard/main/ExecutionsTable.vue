@@ -47,7 +47,7 @@
             <v-btn
               icon
               class="mx-0"
-              @click="refreshExecution(exec)"
+              @click="refreshExecution(exec, e)"
             >
               <v-icon color="pink">
                 refresh
@@ -171,16 +171,14 @@
             this.snack = { show: true, text: 'There was an error loading executions.', color: 'error' }
           })
       },
-      refreshExecution (execution) {
+      refreshExecution (execution, e) {
         console.log('Refreshing execution: ' + execution.id + ' .')
-        console.log(execution)
         API.execution.getOneDetail(execution.id, 'status')
           .then((response) => {
-            console.log(response)
             if ('error' in response) {
               this.snack = { show: true, text: 'There was an error refreshing the execution ' + execution.id + '.', color: 'error' }
             } else {
-              this.executions[execution] = response
+              this.executions[e].message = response.message
               this.snack = { show: true, text: 'Execution refreshed successfully.', color: 'success' }
             }
           })
@@ -230,20 +228,20 @@
           })
       },
       downloadExecution (exec) {
-        API.instance.getOneDetail(exec.id, 'data')
+        API.execution.getOneDetail(exec.id, 'data')
           .then(response => {
+            console.log('Downloading execution: ' + exec.id)
             if ('error' in response) {
-              this.snack = { show: true, text: response.error, color: 'error' }
+              this.snack = { show: true, text: 'There was an error downloading the execution: ' + exec.id, color: 'error' }
               console.log(response.error)
             } else {
-              console.log(response.data)
               download(JSON.stringify(response.data), exec.id + '.json', 'text/json')
-              this.snack = { show: true, text: 'Instances loaded.', color: 'success' }
+              this.snack = { show: true, text: 'Executions loaded.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.snack = { show: true, text: 'There was an error loading the instances: ' + error, color: 'error' }
+            this.snack = { show: true, text: 'There was an error downloading the execution: ' + exec.id, color: 'error' }
           })
       },
     },
