@@ -1,3 +1,3 @@
 export default {
-  baseUrl: 'http://localhost:5000',
+  baseUrl: process.env.VUE_APP_BASE_URL,
 }
