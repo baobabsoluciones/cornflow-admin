@@ -7,7 +7,19 @@
     <base-v-component
       heading="New instance generation"
     />
-    <p>Paste a pulp json format for an instance and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
+    <p>Choose a name and a description for your new instance. Then, paste a pulp json format for an instance and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
+    <v-text-field
+      v-model="name"
+      label="Name"
+    />
+    <v-text-field
+      v-model="description"
+      label="Description"
+    />
+    <v-text-field
+      v-model="schema"
+      label="Schema"
+    />
     <send-json
       :default-value="defaultJson"
       :input-schema="pulpJsonSchema"
@@ -57,6 +69,9 @@
           color: 'red',
         },
         timeout: 2000,
+        name: '',
+        description: '',
+        schema: '',
       }
     },
     methods: {
@@ -92,7 +107,11 @@
       submitJson (json) {
         console.log('Sending json to API')
         /* TODO: add name and description fields and map them */
-        const data = { data: json, name: 'instance123', description: '' }
+        if (!this.name | !this.description) {
+          this.snack = { show: true, text: 'Introduce a name and a description for your new instance.', color: 'error' }
+          return 0
+        }
+        const data = { data: json, name: this.name, description: this.description }
         /* const payload = JSON.stringify(data) */
         API.instance.create(data, { 'Content-Type': 'application/json' })
           .then((response) => {

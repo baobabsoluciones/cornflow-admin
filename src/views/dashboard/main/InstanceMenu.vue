@@ -62,6 +62,15 @@
                 <v-btn
                   icon
                   class="mx-0"
+                  @click="downloadInstance(inst)"
+                >
+                  <v-icon color="brown">
+                    mdi-download
+                  </v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  class="mx-0"
                   @click="deleteInstance(i, inst)"
                 >
                   <v-icon color="pink">
@@ -120,6 +129,7 @@
 
 <script>
   import moment from 'moment'
+  import download from 'downloadjs'
   import API from '../../../api/index'
   import TestModal from '../pages/EditModal'
   export default {
@@ -174,7 +184,7 @@
         API.instance.getAll()
           .then(response => {
             if ('error' in response) {
-              this.alert = { show: true, text: response.error, type: 'error' }
+              this.snack = { show: true, text: response.error, color: 'error' }
               console.log(response.error)
             } else {
               this.instances = response.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
@@ -229,6 +239,30 @@
             this.snack = { show: true, text: 'There was an error deleting the instance ' + inst.id + '.', color: 'error' }
           })
       },
+      downloadInstance (inst) {
+        API.instance.getOneDetail(inst.id, 'data')
+          .then(response => {
+            console.log('Downloading instance: ' + inst.id)
+            if ('error' in response) {
+              this.snack = { show: true, text: 'There was an error downloading the instance: ' + inst.id, color: 'error' }
+              console.log(response.error)
+            } else {
+              download(JSON.stringify(response.data), inst.id + '.json', 'text/json')
+              this.snack = { show: true, text: 'Instance downloaded.', color: 'success' }
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.snack = { show: true, text: 'There was an error downloading the instance: ' + inst.id, color: 'error' }
+          })
+      },
     },
   }
 </script>
+
+<style>
+.theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+    background-color: white;
+    color: white;
+}
+</style>

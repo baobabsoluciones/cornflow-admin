@@ -7,16 +7,11 @@
     <base-v-component
       heading="Start an execution"
     />
-    <v-btn
-      type="submit"
-      value="Submit"
-      color="success"
-      class="mr-0"
-      @click="loadData"
-    >
-      Fill list
-    </v-btn>
-    <p></p>
+    <p>
+      Choose an instance to solve. Then, choose a name and a description for your new execution.
+      Lastly, paste a pulp json format for a solver configuration and send it to the server.
+      Alternatively, upload a json file with the format using the below card.
+    </p>
     <v-autocomplete
       v-model="value"
       :items="items"
@@ -26,7 +21,14 @@
       outlined
       label="Choose an instance to solve from the list"
     />
-    <p>Paste a pulp json format for a solver configuration and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
+    <v-text-field
+      v-model="name"
+      label="Name"
+    />
+    <v-text-field
+      v-model="description"
+      label="Description"
+    />
     <send-json
       :default-value="{ solver: 'PULP_CBC_CMD', timeLimit: 10 }"
       @submit-json="submitJson"
@@ -70,6 +72,8 @@
           color: 'red',
         },
         timeout: 2000,
+        name: '',
+        description: '',
       }
     },
     mounted () { this.loadData() },
@@ -81,7 +85,11 @@
           this.snack = { show: true, text: 'You need to select an instance first!', color: 'error' }
           return
         }
-        const data = { config: json, instance_id: this.value, name: 'execution12', description: '' }
+        if (!this.name | !this.description) {
+          this.snack = { show: true, text: 'Introduce a name and a description for your new execution.', color: 'error' }
+          return 0
+        }
+        const data = { config: json, instance_id: this.value, name: this.name, description: this.description }
         API.execution.create(data, { 'Content-Type': 'application/json' })
           .then((response) => {
             if ('error' in response) {

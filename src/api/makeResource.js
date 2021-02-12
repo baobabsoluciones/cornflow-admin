@@ -13,6 +13,8 @@ export const makeResourceWithClient = client => resourceName => {
 
   const put = (id, data, headers = {}) => client.put(`/${resourceName}/${id}/`, data, headers)
 
+  const putAdmin = (id, data, admin, headers = {}) => client.put(`/${resourceName}/${id}/${admin}/`, data, headers)
+
   return {
     getAll,
     getOne,
@@ -20,6 +22,7 @@ export const makeResourceWithClient = client => resourceName => {
     create,
     getOneDetail,
     put,
+    putAdmin,
   }
 }
 

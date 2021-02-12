@@ -38,6 +38,24 @@
             <v-btn
               icon
               class="mx-0"
+              @click="downloadExecution(exec)"
+            >
+              <v-icon color="brown">
+                mdi-download
+              </v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              class="mx-0"
+              @click="refreshExecution(exec)"
+            >
+              <v-icon color="pink">
+                refresh
+              </v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              class="mx-0"
               @click="deleteExecution(e, exec)"
             >
               <v-icon color="pink">
@@ -79,6 +97,7 @@
 
 <script>
   import moment from 'moment'
+  import download from 'downloadjs'
   import API from '../../../api/index'
   import TestModal from '../pages/EditModal'
   export default {
@@ -140,26 +159,46 @@
         API.instance.getOne(instanceId)
           .then((response) => {
             if ('error' in response) {
-              // this.snack = { show: true, text: 'There was an error loading executions.', color: 'error' }
-
+              this.snack = { show: true, text: 'There was an error loading executions.', color: 'error' }
             } else {
               this.executions = response.executions
               this.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
-              // this.snack = { show: true, text: 'Executions loaded.', color: 'success' }
+              this.snack = { show: true, text: 'Executions loaded.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            // this.snack = { show: true, text: 'There was an error loading executions.', color: 'error' }
+            this.snack = { show: true, text: 'There was an error loading executions.', color: 'error' }
+          })
+      },
+      refreshExecution (execution) {
+        console.log('Refreshing execution: ' + execution.id + ' .')
+        console.log(execution)
+        API.execution.getOneDetail(execution.id, 'status')
+          .then((response) => {
+            console.log(response)
+            if ('error' in response) {
+              this.snack = { show: true, text: 'There was an error refreshing the execution ' + execution.id + '.', color: 'error' }
+            } else {
+              this.executions[execution] = response
+              this.snack = { show: true, text: 'Execution refreshed successfully.', color: 'success' }
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.snack = { show: true, text: 'There was an error refreshing the execution ' + execution.id + '.', color: 'error' }
           })
       },
       editExecution (payload) {
-        console.log(this.execEdit)
         this.execEdit.name = payload.name.value
         this.execEdit.description = payload.description.value
         console.log('Editing execution: ' + this.execEdit.id)
         this.showEditModal = false
-        API.execution.put(this.execEdit.id, this.execEdit)
+        API.execution.put(
+          this.execEdit.id,
+          { name: this.execEdit.name, description: this.execEdit.description },
+          { 'Content-Type': 'application/json' },
+        )
           .then((response) => {
             console.log(response)
             if ('error' in response) {
@@ -188,6 +227,23 @@
           .catch((error) => {
             console.log(error)
             this.snack = { show: true, text: 'There was an error deleting the execution ' + exec.id + '.' + error, color: 'error' }
+          })
+      },
+      downloadExecution (exec) {
+        API.instance.getOneDetail(exec.id, 'data')
+          .then(response => {
+            if ('error' in response) {
+              this.snack = { show: true, text: response.error, color: 'error' }
+              console.log(response.error)
+            } else {
+              console.log(response.data)
+              download(JSON.stringify(response.data), exec.id + '.json', 'text/json')
+              this.snack = { show: true, text: 'Instances loaded.', color: 'success' }
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+            this.snack = { show: true, text: 'There was an error loading the instances: ' + error, color: 'error' }
           })
       },
     },

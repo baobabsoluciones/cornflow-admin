@@ -158,7 +158,7 @@
       ],
       menuUserItems: [
         { title: 'Log In', id: '1' },
-        { title: 'Sign In', id: '2' },
+        { title: 'Sign Up', id: '2' },
       ],
       menuLogoutItem: [
         { title: 'log out', id: '3' },
@@ -214,8 +214,8 @@
         } else if (bmenu === '2') {
           this.modalList = this.SigninFieldsList
           this.modalFunction = this.signinSubmit
-          this.modalTitle = 'Introduce your credentials to sign in!'
-          this.modalButtonText = 'Sign in'
+          this.modalTitle = 'Introduce your credentials to sign up!'
+          this.modalButtonText = 'Sign up'
           this.showEditModal = true
         } else if (bmenu === '3') {
           this.logout()
@@ -244,7 +244,7 @@
           })
       },
       signinSubmit (payload) {
-        API.signup(payload.user.value, payload.pwd.value, payload.pwd.name)
+        API.signup(payload.user.value, payload.pwd.value, payload.name.value)
           .then(response => {
             if ('error' in response | (response.status !== 200 & response.status !== 201)) {
               if ('error' in response) {
