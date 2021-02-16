@@ -7,15 +7,43 @@
     <base-v-component
       heading="New instance generation"
     />
-    <p>Paste a pulp json format for an instance and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
+    <p>Choose a name and a description for your new instance. Then, paste a pulp json format for an instance and send it to the server. Alternatively, upload a json file with the format using the below card.</p>
+    <v-text-field
+      v-model="name"
+      label="Name"
+    />
+    <v-text-field
+      v-model="description"
+      label="Description"
+    />
+    <v-text-field
+      v-model="schema"
+      label="Schema"
+    />
     <send-json
       :default-value="defaultJson"
-      :alert="alert"
       :input-schema="pulpJsonSchema"
       @submit-json="submitJson"
       @submit-file="submitForm"
     />
     <div class="py-3" />
+    <v-snackbar
+      v-model="snack.show"
+      :timeout="timeout"
+    >
+      {{ snack.text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          :color="snack.color"
+          text
+          v-bind="attrs"
+          @click="snack.show=false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -35,18 +63,22 @@
         submitted: false,
         error: false,
         pulpJsonSchema: pulpJsonSchema,
-        alert: {
-          text: '',
+        snack: {
           show: false,
-          type: 'success',
+          text: '',
+          color: 'red',
         },
+        timeout: 2000,
+        name: '',
+        description: '',
+        schema: '',
       }
     },
     methods: {
       submitForm (file) {
         if (file === null) {
           console.log('First upload a file!')
-          this.alert = { show: true, text: 'You need to add a file first!', type: 'error' }
+          this.snack = { show: true, text: 'You need to add a file first!', color: 'error' }
           return
         }
         var formData = new FormData()
@@ -61,33 +93,37 @@
         API.instancefile(formData)
           .then((response) => {
             if ('error' in response) {
-              this.alert = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', type: 'error' }
+              this.snack = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', color: 'error' }
             } else {
-              this.alert = { show: true, text: 'Instance created successfuly.', type: 'success' }
+              this.snack = { show: true, text: 'Instance created successfuly.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error creating the instance: ' + '.', type: 'error' }
+            this.snack = { show: true, text: 'There was an error creating the instance: ' + error + '.', color: 'error' }
           })
       },
       submitJson (json) {
         console.log('Sending json to API')
         /* TODO: add name and description fields and map them */
-        const data = { data: json, name: 'instance123', description: '' }
+        if (!this.name) {
+          this.snack = { show: true, text: 'Introduce a name for your new instance.', color: 'error' }
+          return 0
+        }
+        const data = { data: json, name: this.name, description: this.description }
         /* const payload = JSON.stringify(data) */
-        API.instance.create(data, { 'Content-Type': 'application/json' })
+        API.instance.create(data)
           .then((response) => {
             /* console.log(response) */
             if ('error' in response) {
-              this.alert = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', type: 'error' }
+              this.snack = { show: true, text: 'There was an error creating the instance: ' + response.error + '.', color: 'error' }
             } else {
-              this.alert = { show: true, text: 'Instance created successfuly.', type: 'success' }
+              this.snack = { show: true, text: 'Instance created successfuly.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.alert = { show: true, text: 'There was an error creating the instance.', type: 'error' }
+            this.snack = { show: true, text: 'There was an error creating the instance: ' + error + '.', color: 'error' }
           })
       },
     },

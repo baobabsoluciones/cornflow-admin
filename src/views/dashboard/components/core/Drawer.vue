@@ -31,8 +31,7 @@
           contain
         >
           <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="30"
+            :src="require('../../../../assets/iconoBaobab.jpg')"
           />
         </v-list-item-avatar>
 
@@ -51,8 +50,6 @@
       expand
       nav
     >
-      <!-- Style cascading bug  -->
-      <!-- https://github.com/vuetifyjs/vuetify/pull/8574 -->
       <div />
 
       <template v-for="(item, i) in computedItems">
@@ -60,9 +57,7 @@
           v-if="item.children"
           :key="`group-${i}`"
           :item="item"
-        >
-          <!--  -->
-        </base-item-group>
+        />
 
         <base-item
           v-else
@@ -71,20 +66,9 @@
         />
       </template>
 
-      <!-- Style cascading bug  -->
-      <!-- https://github.com/vuetifyjs/vuetify/pull/8574 -->
       <div />
     </v-list>
 
-    <template v-slot:append>
-      <base-item
-        :item="{
-          title: $t('upgrade'),
-          icon: 'mdi-package-up',
-          to: '/upgrade',
-        }"
-      />
-    </template>
   </v-navigation-drawer>
 </template>
 
@@ -155,7 +139,7 @@
       profile () {
         return {
           avatar: true,
-          title: this.$t('avatar'),
+          title: 'baobab soluciones',
         }
       },
     },

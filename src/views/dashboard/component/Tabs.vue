@@ -382,17 +382,12 @@
       tab: 0,
       tabs: [
         'Profile',
-        'Settings',
         'Options',
       ],
       tabs2: [
         {
           text: 'Home',
           icon: 'mdi-view-dashboard',
-        },
-        {
-          text: 'Settings',
-          icon: 'mdi-clock-outline',
         },
       ],
       tabs3: [
