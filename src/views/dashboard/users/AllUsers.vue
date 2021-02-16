@@ -83,7 +83,7 @@
     </base-material-card>
     <div class="py-3" />
 
-    <test-modal
+    <edit-modal
       v-model="showEditModal"
       :fields="modalTextList"
       :title="modalTitle"
@@ -113,12 +113,12 @@
 
 <script>
   import moment from 'moment'
-  import TestModal from '../pages/EditModal'
+  import EditModal from '../pages/EditModal'
   import API from '../../../api/index'
   export default {
     name: 'UserTable',
     components: {
-      TestModal,
+      EditModal,
     },
     filters: {
       moment: function (date) {
@@ -194,15 +194,11 @@
         console.log(payload)
         this.userEdit.name = payload.name.value
         this.userEdit.email = payload.email.value
-        // meter correo, nombre y revisar qué más
-        // quitar admin y hacerlo con switch
-        // mostrar de otra manera el superadmin
         this.showEditModal = false
         console.log(this.userEdit)
         API.user.put(
           this.userEdit.id,
           { name: this.userEdit.name, email: this.userEdit.email },
-          { 'Content-Type': 'application/json' },
         )
           .then((response) => {
             if ('error' in response) {
@@ -218,30 +214,26 @@
           })
       },
       editAdmin (user) {
-        this.userEdit = user
-        console.log('Editing user admin with id: ' + this.userEdit.id)
+        console.log('Editing user admin with id: ' + user.id)
         if (user.admin !== true) {
-          this.userEdit.admin = false
+          user.admin = false
         } else {
-          this.userEdit.admin = true
+          user.admin = true
         }
-        console.log(Number(this.userEdit.admin))
-        API.user.putAdmin(
-          this.userEdit.id, { admin: this.userEdit.admin }, Number(this.userEdit.admin),
-          { 'Content-Type': 'application/json' },
+        API.putAdmin(
+          user.id, Number(user.admin),
         )
           .then((response) => {
-            console.log(response)
             if ('error' in response) {
               console.log(response.error)
               this.snack = { show: true, text: 'There was an error editing the user: ' + response.error + '.', color: 'error' }
             } else {
-              this.snack = { show: true, text: 'User ' + this.userEdit.id + ' was edited succesfully.', color: 'success' }
+              this.snack = { show: true, text: 'User ' + user.id + ' was edited succesfully.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.snack = { show: true, text: 'There was an error editing the user ' + this.userEdit.id + '.', color: 'error' }
+            this.snack = { show: true, text: 'There was an error editing the user ' + user.id + '.', color: 'error' }
           })
       },
     },

@@ -89,25 +89,25 @@
         <v-list-item
           v-for="(item, index) in menuItemList"
           :key="index"
-          @click.stop="showModal(item.id)"
+          @click.stop="showModal(item)"
         >
           <v-list-item-title>
             <v-btn
               block
               color="white"
             >
-              {{ item.title }}
+              {{ item.menuTitle }}
             </v-btn>
           </v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
-    <test-modal
+    <edit-modal
       v-model="showEditModal"
-      :fields="modalList"
-      :title="modalTitle"
-      :buttonText="modalButtonText"
-      @submit-form="modalFunction"
+      :fields="modalInfo.fields"
+      :title="modalInfo.title"
+      :buttonText="modalInfo.buttonText"
+      @submit-form="modalInfo.function"
     />
     <v-snackbar
       v-model="snack.show"
@@ -132,12 +132,12 @@
 <script>
   // Utilities
   import { mapState, mapMutations } from 'vuex'
-  import TestModal from '../../pages/EditModal'
+  import EditModal from '../../pages/EditModal'
   import API from '../../../../api/index'
   export default {
     name: 'DashboardCoreAppBar',
     components: {
-      TestModal,
+      EditModal,
     },
     props: {
       value: {
@@ -146,24 +146,45 @@
       },
     },
     data: () => ({
-      modalList: [],
-      LoginFieldsList: [
-        { name: 'user', label: 'Username', default: '' },
-        { name: 'pwd', label: 'Password', default: '', type: 'password' },
-      ],
-      SigninFieldsList: [
-        { name: 'user', label: 'Username', default: '' },
-        { name: 'pwd', label: 'Password', default: '', type: 'password' },
-        { name: 'name', label: 'Name', default: '' },
-      ],
-      menuUserItems: [
-        { title: 'Log In', id: '1' },
-        { title: 'Sign Up', id: '2' },
-      ],
-      menuLogoutItem: [
-        { title: 'log out', id: '3' },
-      ],
       menuItemList: [],
+      modalInfo: { fields: [], function: {}, title: '', buttonText: '' },
+      listInOptions: [
+        {
+          fields: [
+            { name: 'user', label: 'Username', default: '' },
+            { name: 'pwd', label: 'Password', default: '', type: 'password' },
+          ],
+          // Function assigned in mounted()
+          function: '',
+          title: 'Introduce your credentials to log in!',
+          buttonText: 'Log in',
+          menuTitle: 'Log in',
+          showModal: true,
+        },
+        {
+          fields: [
+            { name: 'user', label: 'Username', default: '' },
+            { name: 'pwd', label: 'Password', default: '', type: 'password' },
+            { name: 'name', label: 'Name', default: '' },
+          ],
+          // Function assigned in mounted()
+          function: '',
+          title: 'Introduce your credentials to sign up!',
+          buttonText: 'Sign up',
+          menuTitle: 'Sign up',
+          showModal: true,
+        },
+      ],
+      listOutOptions: [
+        {
+          fields: [],
+          function: '',
+          title: '',
+          buttonText: '',
+          menuTitle: 'Log out',
+          showModal: false,
+        },
+      ],
       snack: {
         show: false,
         text: '',
@@ -172,15 +193,15 @@
       timeout: 2000,
       showEditModal: false,
       showMenu: false,
-      modalFunction: '',
-      modalTitle: '',
-      modalButtonText: '',
       accountIconColor: '',
     }),
     computed: {
       ...mapState(['drawer']),
     },
     mounted () {
+      // Review function assign
+      this.listInOptions[0].function = this.loginSubmit
+      this.listInOptions[1].function = this.signinSubmit
       if ('token' in localStorage) {
         this.accountIconColor = 'success'
       } else {
@@ -199,27 +220,19 @@
       },
       menuItems () {
         if ('token' in localStorage) {
-          this.menuItemList = this.menuLogoutItem
+          this.menuItemList = this.listOutOptions
         } else {
-          this.menuItemList = this.menuUserItems
+          this.menuItemList = this.listInOptions
         }
       },
-      showModal (bmenu) {
-        if (bmenu === '1') {
-          this.modalList = this.LoginFieldsList
-          this.modalFunction = this.loginSubmit
-          this.modalTitle = 'Introduce your credentials to log in!'
-          this.modalButtonText = 'Log in'
-          this.showEditModal = true
-        } else if (bmenu === '2') {
-          this.modalList = this.SigninFieldsList
-          this.modalFunction = this.signinSubmit
-          this.modalTitle = 'Introduce your credentials to sign up!'
-          this.modalButtonText = 'Sign up'
-          this.showEditModal = true
-        } else if (bmenu === '3') {
+      showModal (choice) {
+        this.modalInfo = choice
+        this.showEditModal = choice.showModal
+        // Next line should be reviewed
+        // when logout, it's only neccessary to run logout(), we don't want to assign a function to the modal and open it
+        if (!this.showEditModal) {
+          this.modalInfo.function = ''
           this.logout()
-          this.showEditModal = false
         }
       },
       loginSubmit (payload) {

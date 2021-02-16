@@ -85,12 +85,12 @@
           this.snack = { show: true, text: 'You need to select an instance first!', color: 'error' }
           return
         }
-        if (!this.name | !this.description) {
-          this.snack = { show: true, text: 'Introduce a name and a description for your new execution.', color: 'error' }
+        if (!this.name) {
+          this.snack = { show: true, text: 'Introduce a name for your new execution.', color: 'error' }
           return 0
         }
         const data = { config: json, instance_id: this.value, name: this.name, description: this.description }
-        API.execution.create(data, { 'Content-Type': 'application/json' })
+        API.execution.create(data)
           .then((response) => {
             if ('error' in response) {
               this.snack = { show: true, text: 'There was an error creating the execution: ' + response.error + '.', color: 'error' }

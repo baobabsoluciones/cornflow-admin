@@ -1,5 +1,6 @@
 import makeResource from './makeResource'
 import login from './login'
+import admin from './admin'
 import config from '../config'
 
 const instancefile = (data) =>
@@ -14,6 +15,7 @@ const instancefile = (data) =>
 export default {
   signin: login.login,
   signup: login.signup,
+  putAdmin: admin.putAdmin,
   instancefile,
   user: makeResource('user'),
   instance: makeResource('instance'),

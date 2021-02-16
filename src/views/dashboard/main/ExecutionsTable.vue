@@ -17,7 +17,7 @@
           v-for="(exec,e) in executions"
           :key="e"
         >
-          <td>{{ exec.id }}</td>
+          <td class="justify-center layout px-0">{{ exec.id }}</td>
           <td>{{ exec.name }}</td>
           <td>{{ exec.config.solver }}</td>
           <td>{{ exec.config.timeLimit }}</td>
@@ -35,15 +35,44 @@
                 edit
               </v-icon>
             </v-btn>
-            <v-btn
-              icon
-              class="mx-0"
-              @click="downloadExecution(exec)"
+            <v-menu
+              transition="slide-y-transition"
+              closeOnClick
+              closeOnContentClick
+              offset-y
             >
-              <v-icon color="brown">
-                mdi-download
-              </v-icon>
-            </v-btn>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  text
+                  class="ml-2"
+                  icon
+                  min-width="0"
+                  overlap
+                  elevation="0"
+                  v-on="on"
+                >
+                <v-icon color="brown">
+                  mdi-download
+                </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in menuItemList"
+                  :key="index"
+                  @click.stop="downloadExecution(exec, item)"
+                >
+                  <v-list-item-title>
+                    <v-btn
+                      block
+                      color="white"
+                    >
+                      {{ item.title }}
+                    </v-btn>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
             <v-btn
               icon
               class="mx-0"
@@ -67,7 +96,7 @@
       </tbody>
     </v-simple-table>
 
-    <test-modal
+    <edit-modal
       v-model="showEditModal"
       :fields="modalList"
       :title="modalTitle"
@@ -99,11 +128,11 @@
   import moment from 'moment'
   import download from 'downloadjs'
   import API from '../../../api/index'
-  import TestModal from '../pages/EditModal'
+  import EditModal from '../pages/EditModal'
   export default {
     name: 'ExecutionTable',
     components: {
-      TestModal,
+      EditModal,
     },
     filters: {
       moment: function (date) {
@@ -140,6 +169,9 @@
         modalTitle: '',
         modalButtonText: '',
         execEdit: '',
+        menuItemList: [
+          { title: 'Solution', url: 'data' }, { title: 'Log', url: 'log' },
+        ],
       }
     },
     mounted () { this.loadData(this.instanceId) },
@@ -195,7 +227,6 @@
         API.execution.put(
           this.execEdit.id,
           { name: this.execEdit.name, description: this.execEdit.description },
-          { 'Content-Type': 'application/json' },
         )
           .then((response) => {
             console.log(response)
@@ -227,21 +258,21 @@
             this.snack = { show: true, text: 'There was an error deleting the execution ' + exec.id + '.' + error, color: 'error' }
           })
       },
-      downloadExecution (exec) {
-        API.execution.getOneDetail(exec.id, 'data')
+      downloadExecution (exec, item) {
+        API.execution.getOneDetail(exec.id, item.url)
           .then(response => {
-            console.log('Downloading execution: ' + exec.id)
+            console.log('Downloading execution (' + item.title + '): ' + exec.id)
             if ('error' in response) {
-              this.snack = { show: true, text: 'There was an error downloading the execution: ' + exec.id, color: 'error' }
+              this.snack = { show: true, text: 'There was an error downloading the execution (' + item.title + '): ' + exec.id, color: 'error' }
               console.log(response.error)
             } else {
-              download(JSON.stringify(response.data), exec.id + '.json', 'text/json')
+              download(JSON.stringify(response.data), item.title + '_' + exec.id + '.json', 'text/json')
               this.snack = { show: true, text: 'Executions loaded.', color: 'success' }
             }
           })
           .catch((error) => {
             console.log(error)
-            this.snack = { show: true, text: 'There was an error downloading the execution: ' + exec.id, color: 'error' }
+            this.snack = { show: true, text: 'There was an error downloading the execution (' + item.title + '): ' + exec.id, color: 'error' }
           })
       },
     },

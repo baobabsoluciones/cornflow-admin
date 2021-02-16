@@ -9,11 +9,9 @@ export const makeResourceWithClient = client => resourceName => {
 
   const del = id => client.delete(`/${resourceName}/${id}/`)
 
-  const create = (data, headers = {}) => client.post(`/${resourceName}/`, data, headers)
+  const create = (data, headers = { 'Content-Type': 'application/json' }) => client.post(`/${resourceName}/`, data, headers)
 
-  const put = (id, data, headers = {}) => client.put(`/${resourceName}/${id}/`, data, headers)
-
-  const putAdmin = (id, data, admin, headers = {}) => client.put(`/${resourceName}/${id}/${admin}/`, data, headers)
+  const put = (id, data, headers = { 'Content-Type': 'application/json' }) => client.put(`/${resourceName}/${id}/`, data, headers)
 
   return {
     getAll,
@@ -22,7 +20,6 @@ export const makeResourceWithClient = client => resourceName => {
     create,
     getOneDetail,
     put,
-    putAdmin,
   }
 }
 

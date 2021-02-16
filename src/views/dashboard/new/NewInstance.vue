@@ -106,13 +106,13 @@
       submitJson (json) {
         console.log('Sending json to API')
         /* TODO: add name and description fields and map them */
-        if (!this.name | !this.description) {
-          this.snack = { show: true, text: 'Introduce a name and a description for your new instance.', color: 'error' }
+        if (!this.name) {
+          this.snack = { show: true, text: 'Introduce a name for your new instance.', color: 'error' }
           return 0
         }
         const data = { data: json, name: this.name, description: this.description }
         /* const payload = JSON.stringify(data) */
-        API.instance.create(data, { 'Content-Type': 'application/json' })
+        API.instance.create(data)
           .then((response) => {
             /* console.log(response) */
             if ('error' in response) {

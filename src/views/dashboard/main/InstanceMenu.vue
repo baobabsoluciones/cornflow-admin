@@ -14,15 +14,6 @@
       title="Instances: click on an instance to show executions for the Instance"
       class="px-5 py-3"
     >
-      <v-btn
-        type="submit"
-        value="Submit"
-        color="success"
-        class="mr-0"
-        @click="loadData"
-      >
-        Update!
-      </v-btn>
       <v-simple-table>
         <thead>
           <tr>
@@ -99,7 +90,7 @@
     </base-material-card>
     <div class="py-3" />
 
-    <test-modal
+    <edit-modal
       v-model="showEditModal"
       :fields="modalList"
       :title="modalTitle"
@@ -131,12 +122,12 @@
   import moment from 'moment'
   import download from 'downloadjs'
   import API from '../../../api/index'
-  import TestModal from '../pages/EditModal'
+  import EditModal from '../pages/EditModal.vue'
   export default {
     name: 'InstanceTable',
     components: {
       ExecutionsTable: () => import('./ExecutionsTable'),
-      TestModal,
+      EditModal,
     },
     filters: {
       moment: function (date) {
@@ -211,7 +202,6 @@
         API.instance.put(
           this.instEdit.id,
           { name: this.instEdit.name, description: this.instEdit.description },
-          { 'Content-Type': 'application/json' },
         )
           .then((response) => {
             console.log(response)
