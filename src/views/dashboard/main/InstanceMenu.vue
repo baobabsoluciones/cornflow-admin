@@ -38,9 +38,7 @@
               <td>{{ inst.name }}</td>
               <td>{{ inst.created_at | moment }}</td>
               <td>{{ inst.modified_at | moment }}</td>
-              <td
-                class="justify-center layout px-0"
-              >
+              <td>
                 <v-btn
                   icon
                   class="mx-0"

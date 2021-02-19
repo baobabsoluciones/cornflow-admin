@@ -17,15 +17,19 @@
           v-for="(exec,e) in executions"
           :key="e"
         >
-          <td class="justify-center layout px-0">{{ exec.id }}</td>
+          <td>{{ exec.id }}</td>
           <td>{{ exec.name }}</td>
           <td>{{ exec.config.solver }}</td>
           <td>{{ exec.config.timeLimit }}</td>
           <td>{{ exec.created_at | moment }}</td>
-          <td>{{ exec.message }}</td>
-          <td
-            class="justify-center layout px-0"
-          >
+          <td>
+            <v-icon
+              :color="exec.color"
+            >
+              mdi-triangle
+            </v-icon>
+          </td>
+          <td>
             <v-btn
               icon
               class="mx-0"
@@ -51,9 +55,9 @@
                   elevation="0"
                   v-on="on"
                 >
-                <v-icon color="brown">
-                  mdi-download
-                </v-icon>
+                  <v-icon color="brown">
+                    mdi-download
+                  </v-icon>
                 </v-btn>
               </template>
               <v-list>
@@ -150,12 +154,7 @@
     },
     data () {
       return {
-        exeCols: ['Ref', 'Name', 'Solver', 'Time', 'Created on', 'Status'],
-        alert: {
-          text: '',
-          show: false,
-          type: 'success',
-        },
+        exeCols: ['Ref', 'Name', 'Solver', 'Time', 'Created on', 'Status', 'Actions'],
         executions: [],
         snack: {
           show: false,
@@ -195,6 +194,13 @@
             } else {
               this.executions = response.executions
               this.executions.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
+              this.executions.forEach((exec) => {
+                if (exec.state > 0) {
+                  exec.color = 'green'
+                } else {
+                  exec.color = 'red'
+                }
+              })
               this.snack = { show: true, text: 'Executions loaded.', color: 'success' }
             }
           })
@@ -211,6 +217,12 @@
               this.snack = { show: true, text: 'There was an error refreshing the execution ' + execution.id + '.', color: 'error' }
             } else {
               this.executions[e].message = response.message
+              this.executions[e].message = response.state
+              if (this.executions[e].state > 0) {
+                this.executions[e].color = 'green'
+              } else {
+                this.executions[e].color = 'red'
+              }
               this.snack = { show: true, text: 'Execution refreshed successfully.', color: 'success' }
             }
           })
