@@ -48,6 +48,7 @@
                   </template>
                   <span>{{ inst.formatdate }}</span>
                 </v-tooltip>
+              </td>
               <td>
                 <v-btn
                   icon

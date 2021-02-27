@@ -21,7 +21,19 @@
           <td>{{ exec.name }}</td>
           <td>{{ exec.config.solver }}</td>
           <td>{{ exec.config.timeLimit }}</td>
-          <td>{{ exec.created_at | moment }}</td>
+          <td>
+            <v-tooltip left>
+              <template v-slot:activator="{ on }">
+                <div
+                  v-on="on"
+                  class="d-inline-block"
+                >
+                  {{ exec.created_at | moment }}
+                </div>
+              </template>
+              <span>{{ exec.formatdate }}</span>
+            </v-tooltip>
+          </td>
           <td>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -210,6 +222,7 @@
                 } else {
                   exec.color = 'red'
                 }
+                exec.formatdate = moment(exec.created_at).format('DD-MM-YYYY HH:mm:ss')
               })
               this.snack = { show: true, text: 'Executions loaded.', color: 'success' }
             }
