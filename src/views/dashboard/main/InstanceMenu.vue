@@ -36,8 +36,18 @@
             >
               <td>{{ inst.id }}</td>
               <td>{{ inst.name }}</td>
-              <td>{{ inst.created_at | moment }}</td>
-              <td>{{ inst.modified_at | moment }}</td>
+              <td>
+                <v-tooltip left>
+                  <template v-slot:activator="{ on }">
+                  <div
+                    v-on="on"
+                    class="d-inline-block"
+                  >
+                    {{ inst.created_at | moment }}
+                  </div>
+                  </template>
+                  <span>{{ inst.formatdate }}</span>
+                </v-tooltip>
               <td>
                 <v-btn
                   icon
@@ -179,6 +189,9 @@
               this.instances = response.sort((a, b) => (a.modified_at < b.modified_at) ? 1 : -1)
               this.instances.forEach(function (instance) {
                 instance.contentVisible = false
+              })
+              this.instances.forEach((i) => {
+                i.formatdate = moment(i.created_at).format('DD-MM-YYYY HH:mm:ss')
               })
               this.snack = { show: true, text: 'Instances loaded.', color: 'success' }
             }

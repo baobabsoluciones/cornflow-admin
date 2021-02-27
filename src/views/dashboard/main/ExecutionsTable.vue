@@ -23,11 +23,21 @@
           <td>{{ exec.config.timeLimit }}</td>
           <td>{{ exec.created_at | moment }}</td>
           <td>
-            <v-icon
-              :color="exec.color"
-            >
-              mdi-triangle
-            </v-icon>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+              <div
+                v-on="on"
+                class="d-inline-block"
+              >
+                <v-icon
+                  :color="exec.color"
+                >
+                  mdi-triangle
+                </v-icon>
+              </div>
+              </template>
+              <span>{{ exec.message }}</span>
+            </v-tooltip>
           </td>
           <td>
             <v-btn
