@@ -152,7 +152,7 @@
     data () {
       return {
         instances: [],
-        instCols: ['Ref', 'Name', 'Created on', 'Modified on', 'Actions'],
+        instCols: ['Ref', 'Name', 'Created on', 'Actions'],
         snack: {
           show: false,
           text: '',
