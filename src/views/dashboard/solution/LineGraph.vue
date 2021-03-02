@@ -2,34 +2,34 @@
   <svg
     :width="width + margin.left + margin.right"
     :height="height + margin.top + margin.bottom"
-    class='gf-linechart'
+    class="gf-linechart"
   >
     <g
       :transform="`translate(${margin.left + 3}, ${10})`"
     >
       <!-- Axes -->
       <g
-        class='x-axis'
+        class="x-axis"
         :transform="`translate(0, ${height})`"
       />
-      <g class='y-axis'></g>
+      <g class="y-axis" />
 
       <!-- Line -->
       <g>
         <path
-          class='gf-line'
+          class="gf-line"
           d=""
         />
-        <path class='gf-area'></path>
+        <path class="gf-area" />
       </g>
 
       <!-- Grids -->
       <g>
         <g
-          class='gf-x-grid grid'
+          class="gf-x-grid grid"
           :transform="`translate(0, ${height})`"
         />
-        <g class='gf-y-grid grid'></g>
+        <g class="gf-y-grid grid" />
       </g>
 
       <!-- Tooltip -->
@@ -52,6 +52,15 @@
   import * as d3 from 'd3'
   export default {
     name: 'ProgressLineChart',
+    props: {
+      dataset: {
+        type: Array,
+        required: true,
+      },
+      options: {
+        type: Object,
+      },
+    },
     data () {
       return {
         width: 0,
@@ -70,14 +79,18 @@
         bisectDate: null,
       }
     },
-    props: {
-      dataset: {
-        type: Array,
-        required: true,
+    watch: {
+      /**
+       * Re-render the chart on data change
+       */
+      dataset (data) {
+        this.data = data
+        this.init()
       },
-      options: {
-        type: Object,
-      },
+    },
+    mounted () {
+      this.data = this.dataset
+      this.init()
     },
     methods: {
       /**
@@ -194,19 +207,6 @@
         // this.initToolTip()
         // this.renderArea()
       },
-    },
-    watch: {
-      /**
-       * Re-render the chart on data change
-       */
-      dataset (data) {
-        this.data = data
-        this.init()
-      },
-    },
-    mounted () {
-      this.data = this.dataset
-      this.init()
     },
   }
 </script>

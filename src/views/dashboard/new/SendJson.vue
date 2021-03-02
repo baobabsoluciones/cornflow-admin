@@ -17,7 +17,7 @@
         class="mr-0"
         @click="submitJson"
       >
-      Send json
+        Send json
       </v-btn>
     </base-material-card>
     <base-material-card
@@ -32,14 +32,14 @@
             ref="file"
             type="file"
             @change="handleFileUpload"
-          />
+          >
         </label>
         <v-btn
           class="mr-0"
           color="success"
           @click="submitFile"
         >
-        Send file
+          Send file
         </v-btn>
       </div>
     </base-material-card>

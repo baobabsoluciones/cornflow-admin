@@ -41,8 +41,8 @@
                 <v-switch
                   v-model="user.admin"
                   :value="user.admin"
-                  @click="editAdmin(user)"
                   false-value="null"
+                  @click="editAdmin(user)"
                 />
               </td>
               <td>
@@ -87,7 +87,7 @@
       v-model="showEditModal"
       :fields="modalTextList"
       :title="modalTitle"
-      :buttonText="modalButtonText"
+      :button-text="modalButtonText"
       @submit-form="modalFunction"
     />
 

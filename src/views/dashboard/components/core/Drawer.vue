@@ -37,7 +37,7 @@
 
         <v-list-item-content>
           <v-list-item-title
-            class="display-1"
+            class="text-h4"
             v-text="profile.title"
           />
         </v-list-item-content>
@@ -68,7 +68,6 @@
 
       <div />
     </v-list>
-
   </v-navigation-drawer>
 </template>
 

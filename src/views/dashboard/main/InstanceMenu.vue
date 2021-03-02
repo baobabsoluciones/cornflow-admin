@@ -39,12 +39,12 @@
               <td>
                 <v-tooltip left>
                   <template v-slot:activator="{ on }">
-                  <div
-                    v-on="on"
-                    class="d-inline-block"
-                  >
-                    {{ inst.created_at | moment }}
-                  </div>
+                    <div
+                      class="d-inline-block"
+                      v-on="on"
+                    >
+                      {{ inst.created_at | moment }}
+                    </div>
                   </template>
                   <span>{{ inst.formatdate }}</span>
                 </v-tooltip>
@@ -86,10 +86,9 @@
               <td :colspan="5">
                 <div class="accordian-body">
                   <executions-table
-                    :instance-id="inst.id"
                     v-if="inst.contentVisible"
-                  >
-                  </executions-table>
+                    :instance-id="inst.id"
+                  />
                 </div>
               </td>
             </tr>
@@ -103,7 +102,7 @@
       v-model="showEditModal"
       :fields="modalList"
       :title="modalTitle"
-      :buttonText="modalButtonText"
+      :button-text="modalButtonText"
       @submit-form="modalFunction"
     />
 

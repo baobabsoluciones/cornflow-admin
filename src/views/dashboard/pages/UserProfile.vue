@@ -11,11 +11,11 @@
       >
         <base-material-card>
           <template v-slot:heading>
-            <div class="display-2 font-weight-light">
+            <div class="text-h3 font-weight-light">
               Edit Profile
             </div>
 
-            <div class="subtitle-1 font-weight-light">
+            <div class="text-subtitle-1 font-weight-light">
               Complete your profile
             </div>
           </template>

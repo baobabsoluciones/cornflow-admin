@@ -40,7 +40,7 @@
     <progress-line-chart
       :options="{ width: 800, height: 180 }"
       :dataset="dataset"
-    ></progress-line-chart>
+    />
     <div class="py-3" />
     <v-alert
       v-model="alert.show"
@@ -121,23 +121,6 @@
         return formatData
       },
     },
-    mounted () { this.loadData() },
-    methods: {
-      loadData () {
-        API.instance.getAll()
-          .then(response => {
-            if (response !== null) {
-              this.instances = response.map((inst, index) => {
-                return {
-                  id: inst.id,
-                  text: inst.name + ' @ ' + inst.created_at,
-                  value: index,
-                }
-              })
-            }
-          })
-      },
-    },
     watch: {
       selectedInst: function (data) {
         this.selectedEx = null
@@ -203,6 +186,23 @@
               this.alert = { show: true, text: 'There was an error loading execution log', type: 'error' }
             })
         }
+      },
+    },
+    mounted () { this.loadData() },
+    methods: {
+      loadData () {
+        API.instance.getAll()
+          .then(response => {
+            if (response !== null) {
+              this.instances = response.map((inst, index) => {
+                return {
+                  id: inst.id,
+                  text: inst.name + ' @ ' + inst.created_at,
+                  value: index,
+                }
+              })
+            }
+          })
       },
     },
   }

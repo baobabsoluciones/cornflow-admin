@@ -64,8 +64,8 @@
 
     <v-menu
       transition="slide-y-transition"
-      closeOnClick
-      closeOnContentClick
+      close-on-click
+      close-on-content-click
       offset-y
     >
       <template v-slot:activator="{ on }">
@@ -106,7 +106,7 @@
       v-model="showEditModal"
       :fields="modalInfo.fields"
       :title="modalInfo.title"
-      :buttonText="modalInfo.buttonText"
+      :button-text="modalInfo.buttonText"
       @submit-form="modalInfo.function"
     />
     <v-snackbar

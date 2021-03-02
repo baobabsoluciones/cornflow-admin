@@ -25,8 +25,8 @@
             <v-tooltip left>
               <template v-slot:activator="{ on }">
                 <div
-                  v-on="on"
                   class="d-inline-block"
+                  v-on="on"
                 >
                   {{ exec.created_at | moment }}
                 </div>
@@ -37,16 +37,16 @@
           <td>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-              <div
-                v-on="on"
-                class="d-inline-block"
-              >
-                <v-icon
-                  :color="exec.color"
+                <div
+                  class="d-inline-block"
+                  v-on="on"
                 >
-                  mdi-triangle
-                </v-icon>
-              </div>
+                  <v-icon
+                    :color="exec.color"
+                  >
+                    mdi-triangle
+                  </v-icon>
+                </div>
               </template>
               <span>{{ exec.message }}</span>
             </v-tooltip>
@@ -63,8 +63,8 @@
             </v-btn>
             <v-menu
               transition="slide-y-transition"
-              closeOnClick
-              closeOnContentClick
+              close-on-click
+              close-on-content-click
               offset-y
             >
               <template v-slot:activator="{ on }">
@@ -126,7 +126,7 @@
       v-model="showEditModal"
       :fields="modalList"
       :title="modalTitle"
-      :buttonText="modalButtonText"
+      :button-text="modalButtonText"
       @submit-form="modalFunction"
     />
 
