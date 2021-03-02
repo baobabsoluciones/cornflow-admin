@@ -78,7 +78,11 @@
     },
     methods: {
       handleFileUpload () {
+        // const reader = new FileReader()
         this.file = this.$refs.file.files[0]
+        // reader.onload = e => console.log(e.target.result)
+        // reader.readAsText(this.file)
+        // this read and show the text file but i dont know how to display the result with this.json
       },
       submitFile () {
         this.$emit('submit-file', this.file)
