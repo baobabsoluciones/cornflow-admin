@@ -119,6 +119,11 @@
           icon: 'mdi-account',
           to: '/components/users',
         },
+        {
+          title: 'Gantt',
+          icon: '',
+          to: '/hackathon',
+        },
       ],
     }),
 
