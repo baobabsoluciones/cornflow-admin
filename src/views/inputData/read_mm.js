@@ -42,7 +42,7 @@ const treatJob = function (jobString) {
     succ.push(job)
   }
   const el = { id: parseInt(jobData[1]), successors: succ }
-  console.log(el)
+  // console.log(el)
   return el
 }
 
@@ -64,7 +64,7 @@ const treatModes = function (requests, resources) {
     durations.push({ duration: parseInt(cols[2]), job: job, mode: mode })
     for (let index = 0; index < resources.length; index++) {
       const res = resources[index]
-      needs.push({ job: job, mode: mode, resource: res, need: cols[2 + index] })
+      needs.push({ job: job, mode: mode, resource: res, need: parseInt(cols[3 + index]) })
     }
   }
   return { durations: durations, needs: needs }
