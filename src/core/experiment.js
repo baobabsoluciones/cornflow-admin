@@ -1,11 +1,11 @@
-import {addDays, daysToMilliseconds} from './tools'
-import {Instance} from './instance'
+import { addDays, daysToMilliseconds } from './tools'
 
 export class Experiment {
-  constructor(instance, solution) {
+  constructor (instance, solution) {
     this.instance = instance
     this.solution = solution
   }
+
   get jobPeriods () {
     const durations = this.instance.durations
     const treatJob = function (el) {
@@ -17,6 +17,7 @@ export class Experiment {
     }
     return this.solution.assignments.map(treatJob)
   }
+
   get jobFinish () {
     const durations = this.instance.durations
     const treatJob = function (el) {
@@ -29,10 +30,10 @@ export class Experiment {
     return this.solution.assignments.map(treatJob)
   }
 
-  get makeSpan () {return Math.max(...this.jobFinish.map(o => o.finish))}
+  get makeSpan () { return Math.max(...this.jobFinish.map(o => o.finish)) }
 
   get renResUsage () {
-    const resources = this.instance.resources(Instance.resIsRenewable)
+    const resources = this.instance.renResources
     const consumption = {} // resource => [sum(usagePeriod0), sum(usagePeriod1), ...]
     const makeSpan = this.makeSpan
     const needs = this.instance.needs
@@ -50,20 +51,22 @@ export class Experiment {
     }
     return consumption
   }
+
   get nonRenResUsage () {
-    const resources = this.instance.resources().filter(res => !Instance.resIsRenewable(res))
+    const resources = this.instance.nonRenResources
     const consumption = {} // resource => sum(usage)
     const needs = this.instance.needs
     const modes = this.solution.modes
     const usage = (job, resource) => (needs[job][modes[job]][resource] || 0)
-    for (const {job} of this.solution.assignments) {
+    for (const { job } of this.solution.assignments) {
       for (const res of resources) {
         consumption[res] = (consumption[res] || 0) + usage(job, res)
       }
     }
     return consumption
   }
-  get dataGantt (){
+
+  get dataGantt () {
     const table = [
       [
         { type: 'string', label: 'Task ID' },
@@ -94,17 +97,16 @@ export class Experiment {
     table.push(...newRows)
     return table
   }
-get dataResChart () {
-  const table = [['Time',],]
-  const resources = this.instance.resources(this.instance.resIsRenewable)
-  table[0].push(...resources)
-  const consumption = this.solution.renResUsage
-  const firstRes = resources[0]
-  for (let index = 0; index < consumption[firstRes].length; index++) {
-    const row = [index]
-    for (const res of resources) {
-      row.push(consumption[res][index])
-    }
+
+dataResChart (resource) {
+  const resources = this.instance.renResources
+  if (!resources.includes(resource)) {
+    throw Error('Resource is not in renewables')
+  }
+  const table = [['Time', resource]]
+  const consumption = this.renResUsage
+  for (let index = 0; index < consumption[resource].length; index++) {
+    const row = [index, consumption[resource][index]]
     table.push(row)
   }
   return table

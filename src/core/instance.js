@@ -1,12 +1,14 @@
-import {arrayToObject} from './tools'
+import { arrayToObject } from './tools'
+import dataImport from './data_io'
 
 export class Instance {
-  constructor(data) {
+  constructor (data) {
     this.data = data
   }
-  get needs () {return arrayToObject(this.data.needs, ['job', 'mode', 'resource'], 'need')}
-  get durations () {return arrayToObject(this.data.durations, ['job', 'mode'], 'duration')}
-  get capacities () {return arrayToObject(this.data.resources, ['id'], 'available')}
+
+  get needs () { return arrayToObject(this.data.needs, ['job', 'mode', 'resource'], 'need') }
+  get durations () { return arrayToObject(this.data.durations, ['job', 'mode'], 'duration') }
+  get capacities () { return arrayToObject(this.data.resources, ['id'], 'available') }
   get dependencies () {
     const array = this.data.jobs
     const jobDependencies = {}
@@ -22,18 +24,27 @@ export class Instance {
     }
     return jobDependencies
   }
-  resources (filter=null) {
+
+  get resources () {
     const resources = Object.keys(this.capacities)
-    if (filter == null) {
-      return resources
-    }
-    return resources.filter(filter)
+    return resources
   }
+
+  get renResources () {
+    return this.resources.filter(Instance.resIsRenewable)
+  }
+
+  get nonRenResources () {
+    return this.resources.filter((r) => !Instance.resIsRenewable(r))
+  }
+
   static resIsRenewable = (res) => res.charAt(0) === 'R'
-  
+
+  static fromMM = (content) => new Instance(dataImport.loadFile(content))
+
   get dataTable () {
     const capacities = this.capacities
-    const resources = this.resources()
+    const resources = this.resources
     const resCols = resources.map((k, i) => ({ type: 'number', label: `${k} (${capacities[k]})` }))
     const table = [
       [

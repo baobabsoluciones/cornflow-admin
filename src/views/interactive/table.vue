@@ -32,7 +32,7 @@
     },
     computed: {
       chartData: function () {
-        if (this.experiment.instance==null){
+        if (this.experiment.instance == null) {
           return
         }
         return this.experiment.instance.dataTable

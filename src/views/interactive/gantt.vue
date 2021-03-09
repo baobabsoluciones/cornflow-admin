@@ -39,7 +39,7 @@
         if (output == null | input == null) {
           return []
         }
-        return this.experiment.dataGantt  
+        return this.experiment.dataGantt
       },
     },
   }

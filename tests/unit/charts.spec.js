@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils'
 import table from '@/views/interactive/table'
+import graph from '@/views/interactive/graph'
 import instanceData from './../data/oneInstance'
 import solutionData from './../data/oneSolution'
 import {Instance} from '@/core/instance'
@@ -64,20 +65,22 @@ describe('testGraph', () => {
   let cmp;
 
   beforeEach(() => {
-    cmp = mount(table, {
+    cmp = mount(graph, {
       propsData: {
         experiment: 
         new Experiment(
           new Instance(instanceData), 
           new Solution(solutionData)
         ),
+        resource: 'R 1'
       }
     })
   })
 
   it("calculate data for graph", () => {
     const table = cmp.vm.chartData
-    expect(table[0].length).toBe(8)
+    expect(table[0].length).toBe(2)
+    expect(table[3][1]).toBe(6)
   })
 
 })

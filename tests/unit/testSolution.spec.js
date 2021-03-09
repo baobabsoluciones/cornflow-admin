@@ -1,9 +1,9 @@
 //import { shallowMount } from '@vue/test-utils'
-import readMM from './../../src/views/inputData/data_io'
-import {arrayToObject} from './../../src/core/tools'
-import {Instance} from './../../src/core/instance'
-import {Solution} from './../../src/core/solution'
-import {Experiment} from './../../src/core/experiment'
+import {arrayToObject} from '@/core/tools'
+import readMM from '@/core/data_io'
+import {Instance} from '@/core/instance'
+import {Solution} from '@/core/solution'
+import {Experiment} from '@/core/experiment'
 import solutionData from './../data/oneSolution.json'
 import instanceData from './../data/oneInstance.json'
 import fs from 'fs'
@@ -28,6 +28,15 @@ describe('Instances', () => {
     expect(result.Google.USA.John).toBe(1)
     expect(result.Amazon.UK.Arya).toBe(2)
     // console.log(result)
+  })
+
+  it("new instance from static", ()=> {
+    const readAndConvert = function (data) {
+      instance = Instance.fromMM(data)
+      const result = instance.data
+      expect(result).toEqual(instanceData)
+    }
+    fs.readFile('tests/data/c1564_9.mm', (err, data) => readAndConvert(data))
   })
 
   it("get durations", () => {

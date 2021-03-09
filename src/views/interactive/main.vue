@@ -8,6 +8,9 @@
       heading="Gantt"
       link="components/simple-tables"
     />
+    <dragndrop
+      @on-load-file="importDataset"
+    />
     <v-btn
       value="Submit"
       color="success"
@@ -53,42 +56,51 @@
       </v-col>
       <v-col
         cols="12"
-        lg="6"
+        lg="4"
       >
-        <v-row>
+        <base-material-card
+          icon="mdi-clipboard-text"
+          title="Task schedule"
+          class="px-5 py-3"
+        >
+          <gantt
+            v-if="solution!=null"
+            :experiment="experiment"
+          />
+        </base-material-card>
+      </v-col>
+      <v-col
+        cols="12"
+        lg="4"
+      >
+        <!-- <v-row>
           <v-col
             cols="12"
             lg="12"
-          >
-            <base-material-card
-              icon="mdi-clipboard-text"
-              title="Solution"
-              class="px-5 py-3"
-            >
-              <gantt
-                v-if="solution!=null"
-                :experiment="experiment"
-              />
-            </base-material-card>
-          </v-col>
-        </v-row>
-        <v-row>
+          > -->
+
+        <!-- </v-col>
+        </v-row> -->
+        <!-- <v-row>
           <v-col
             cols="12"
             lg="12"
-          >
-            <base-material-card
-              icon="mdi-clipboard-text"
-              title="Solution"
-              class="px-5 py-3"
-            >
-              <graph
-                v-if="solution!=null"
-                :experiment="experiment"
-              />
-            </base-material-card>
-          </v-col>
-        </v-row>
+          > -->
+        <base-material-card
+          v-if="experiment.solution!=null"
+          icon="mdi-clipboard-text"
+          title="Renewable resources usage"
+          class="px-5 py-3"
+        >
+          <graph
+            v-for="(r, k) in experiment.instance.renResources"
+            :key="k"
+            :experiment="experiment"
+            :resource="r"
+          />
+        </base-material-card>
+        <!-- </v-col>
+        </v-row> -->
       </v-col>
     </v-row>
     <div class="py-3" />
@@ -110,9 +122,6 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <dragndrop
-      @on-load-file="importInstance"
-    />
   </v-container>
 </template>
 
@@ -123,10 +132,9 @@
   import graph from './graph'
   import datatable from './table'
   import dragndrop from '../inputData/dragndrop'
-  import readFile from '../inputData/data_io'
-  import {Experiment} from '@/core/experiment'
-  import {Instance} from '@/core/instance'
-  import {Solution} from '@/core/solution'
+  import { Experiment } from '@/core/experiment'
+  import { Instance } from '@/core/instance'
+  import { Solution } from '@/core/solution'
 
   export default {
     name: 'Main',
@@ -152,7 +160,7 @@
     computed: {
       experiment: function () {
         return new Experiment(this.instance, this.solution)
-      }
+      },
     },
     mounted () {
       this.execution = this.$store.state.execution
@@ -161,14 +169,31 @@
       ...mapMutations({
         setExecution: 'SET_LAST_EXECUTION',
       }),
-      importInstance (file) {
+      importDataset (file) {
         console.log(file)
         var fr = new FileReader()
-        //Load Solution with this same method, depending on the name of the file and try-catch
-        const updateInstance = (data) => (this.instance = Instance(data))
+        const ext = file.name.split('.').pop()
+
+        // Load Solution with this same method, depending on the name of the file and try-catch
+        const updateData = (data) => {
+          if (ext === 'mm') {
+            console.log('mm file!')
+            this.instance = Instance.fromMM(data)
+            return
+          }
+          const jsonData = JSON.parse(data)
+          if (jsonData.durations != null) {
+            console.log('Instance!')
+            this.instance = new Instance(jsonData)
+          } else if (jsonData.assignment != null) {
+            console.log('Solution!')
+            this.solution = new Solution(jsonData)
+          } else {
+            throw new Error('Incorrect file format!')
+          }
+        }
         fr.onload = function () {
-          const data = readFile.loadFile(fr.result)
-          updateInstance(data)
+          updateData(fr.result)
         }
         fr.readAsText(file)
       },
@@ -179,7 +204,7 @@
           return
         }
         // TODO: download data_schema from server and check instance matches.
-        const instData = { data: this.instance, name: 'gantt', data_schema: 'hk_2020_dag' }
+        const instData = { data: this.instance.data, name: 'gantt', data_schema: 'hk_2020_dag' }
         API.instance.create(instData)
           .then((response) => {
             if ('error' in response) {

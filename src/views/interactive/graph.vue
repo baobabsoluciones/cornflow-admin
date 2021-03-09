@@ -19,13 +19,23 @@
         type: Object,
         required: true,
       },
+      resource: {
+        type: String,
+        required: true,
+      },
     },
     data () {
       return {
         chartOptions: {
-          height: 1000,
+          vAxis: {
+            maxValue: this.experiment.instance.capacities[this.resource],
+            viewWindow: {
+              max: this.experiment.instance.capacities[this.resource],
+            },
+          },
+          height: 100,
           chart: {
-            title: '',
+            title: 'Resource graph or resource ' + this.resource,
             subtitle: '',
           },
         },
@@ -38,7 +48,7 @@
         if (output == null | input == null) {
           return []
         }
-
+        return this.experiment.dataResChart(this.resource)
       },
     },
   }
