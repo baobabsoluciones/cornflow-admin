@@ -1,7 +1,6 @@
 <template>
   <g-chart
-    :settings="{ packages: ['gantt'] }"
-    :create-chart="(el, google) => new google.visualization.Gantt(el)"
+    type="Table"
     :data="chartData"
     :options="chartOptions"
   />
@@ -11,7 +10,7 @@
   import { GChart } from 'vue-google-charts'
 
   export default {
-    name: 'Gantt',
+    name: 'Table',
     components: {
       GChart,
     },
@@ -24,22 +23,19 @@
     data () {
       return {
         chartOptions: {
-          height: 1000,
           chart: {
-            title: '',
-            subtitle: '',
+            title: 'Table title!',
+            subtitle: 'subtitle of table',
           },
         },
       }
     },
     computed: {
       chartData: function () {
-        const input = this.experiment.instance
-        const output = this.experiment.solution
-        if (output == null | input == null) {
-          return []
+        if (this.experiment.instance==null){
+          return
         }
-        return this.experiment.dataGantt  
+        return this.experiment.instance.dataTable
       },
     },
   }

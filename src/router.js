@@ -51,9 +51,9 @@ export default new Router({
           component: () => import('@/views/dashboard/users/AllUsers'),
         },
         {
-          name: 'Gantt',
+          name: 'Main',
           path: 'hackathon',
-          component: () => import('@/views/interactive/gantt'),
+          component: () => import('@/views/interactive/main'),
         },
       ],
     },

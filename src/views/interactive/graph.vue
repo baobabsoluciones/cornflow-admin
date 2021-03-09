@@ -1,7 +1,6 @@
 <template>
   <g-chart
-    :settings="{ packages: ['gantt'] }"
-    :create-chart="(el, google) => new google.visualization.Gantt(el)"
+    type="SteppedAreaChart"
     :data="chartData"
     :options="chartOptions"
   />
@@ -11,7 +10,7 @@
   import { GChart } from 'vue-google-charts'
 
   export default {
-    name: 'Gantt',
+    name: 'Graph',
     components: {
       GChart,
     },
@@ -39,7 +38,7 @@
         if (output == null | input == null) {
           return []
         }
-        return this.experiment.dataGantt  
+
       },
     },
   }

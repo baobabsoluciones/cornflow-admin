@@ -71,7 +71,10 @@
     },
     methods: {
       onChange () {
-        this.filelist = [...this.$refs.file.files]
+        this.filelist = this.$refs.file.files
+        const file = this.filelist[this.filelist.length - 1]
+        console.log(file)
+        this.$emit('on-load-file', file)
       },
       remove (i) {
         this.filelist.splice(i, 1)

@@ -70,10 +70,15 @@ const treatModes = function (requests, resources) {
   return { durations: durations, needs: needs }
 }
 
+const getFileType = (filename) => {
+  const ext = filename.split('.').pop()
+  if (ext==='mm') {
+    return {type: 'input', ext: 'mm'}
+  } else if (ext==='json') {
+    
+  }
+}
+
 export default {
   loadFile,
 }
-
-// module.exports = {
-//   loadFile,
-// }
