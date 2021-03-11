@@ -15,6 +15,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    INITIALIZE_STORE (state) {
+      state.execution = localStorage.getItem('execution')
+    },
     SET_BAR_IMAGE (state, payload) {
       state.barImage = payload
     },
@@ -26,6 +29,7 @@ export default new Vuex.Store({
       state.user.name = payload.name
     },
     SET_LAST_EXECUTION (state, payload) {
+      localStorage.setItem('execution', payload.execution)
       state.execution = payload.execution
     },
   },

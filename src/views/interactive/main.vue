@@ -51,6 +51,7 @@
           <datatable
             v-if="instance!=null"
             :experiment="experiment"
+            :jobs="filter.jobs"
           />
         </base-material-card>
       </v-col>
@@ -64,8 +65,10 @@
           class="px-5 py-3"
         >
           <gantt
-            v-if="solution!=null"
+            v-if="solution!=null & instance!=null"
             :experiment="experiment"
+            :height="scale.height"
+            @on-select="applyfilter"
           />
         </base-material-card>
       </v-col>
@@ -73,21 +76,8 @@
         cols="12"
         lg="4"
       >
-        <!-- <v-row>
-          <v-col
-            cols="12"
-            lg="12"
-          > -->
-
-        <!-- </v-col>
-        </v-row> -->
-        <!-- <v-row>
-          <v-col
-            cols="12"
-            lg="12"
-          > -->
         <base-material-card
-          v-if="experiment.solution!=null"
+          v-if="solution!=null & instance!=null"
           icon="mdi-clipboard-text"
           title="Renewable resources usage"
           class="px-5 py-3"
@@ -97,10 +87,9 @@
             :key="k"
             :experiment="experiment"
             :resource="r"
+            :height="scale.height/experiment.instance.renResources.length"
           />
         </base-material-card>
-        <!-- </v-col>
-        </v-row> -->
       </v-col>
     </v-row>
     <div class="py-3" />
@@ -127,14 +116,13 @@
 
 <script>
   import { mapMutations } from 'vuex'
-  import API from '../../api/index'
   import gantt from './gantt'
   import graph from './graph'
   import datatable from './table'
   import dragndrop from '../inputData/dragndrop'
-  import { Experiment } from '@/core/experiment'
-  import { Instance } from '@/core/instance'
-  import { Solution } from '@/core/solution'
+  import { Experiment } from '@/app/experiment'
+  import { Instance } from '@/app/instance'
+  import { Solution } from '@/app/solution'
 
   export default {
     name: 'Main',
@@ -149,6 +137,12 @@
         execution: null,
         instance: null,
         solution: null,
+        filter: {
+          jobs: [],
+        },
+        scale: {
+          height: 600,
+        },
         snack: {
           show: false,
           text: '',
@@ -174,19 +168,18 @@
         var fr = new FileReader()
         const ext = file.name.split('.').pop()
 
-        // Load Solution with this same method, depending on the name of the file and try-catch
         const updateData = (data) => {
           if (ext === 'mm') {
-            console.log('mm file!')
+            // this is an instance.mm file
             this.instance = Instance.fromMM(data)
             return
           }
           const jsonData = JSON.parse(data)
           if (jsonData.durations != null) {
-            console.log('Instance!')
+            // this is an instance.json file
             this.instance = new Instance(jsonData)
           } else if (jsonData.assignment != null) {
-            console.log('Solution!')
+            // this is an solution.json file
             this.solution = new Solution(jsonData)
           } else {
             throw new Error('Incorrect file format!')
@@ -198,29 +191,15 @@
         fr.readAsText(file)
       },
       solve () {
-        console.log('Sending execution json to API for instance ' + this.value)
+        console.log('Sending execution json to API for instance.')
         if (!this.instance) {
           this.snack = { show: true, text: 'You need to load an instance first!', color: 'error' }
           return
         }
-        // TODO: download data_schema from server and check instance matches.
-        const instData = { data: this.instance.data, name: 'gantt', data_schema: 'hk_2020_dag' }
-        API.instance.create(instData)
+        this.instance.toCornflowAndSolve(this.snack, { solver: 'ortools', timeLimit: 10 })
           .then((response) => {
-            if ('error' in response) {
-              this.snack = { show: true, text: 'Instance creation returned error: ' + response.error + '.', color: 'error' }
-              return
-            }
-            const data = { config: { solver: 'ortools', timeLimit: 10 }, instance_id: response.id, name: 'gant_solve', dag_name: 'hk_2020_dag' }
-            API.execution.create(data)
-              .then((response) => {
-                if ('error' in response) {
-                  this.snack = { show: true, text: 'There was an error creating the execution: ' + response.error + '.', color: 'error' }
-                  return
-                }
-                this.execution = response.id
-                this.setExecution({ execution: response.id })
-              })
+            this.execution = response.id
+            this.setExecution({ execution: response.id })
           })
       },
       getSolution () {
@@ -228,31 +207,20 @@
           this.snack = { show: true, text: 'You first need to send an instance to solve', color: 'error' }
           return
         }
-        API.execution.getOneDetail(this.execution, 'status').then((response) => {
-          if (response.state === 0) {
-            this.snack = { show: true, text: 'Results are not yet ready', color: 'error' }
-            return
-          } else if (response.state < 0) {
-            this.snack = { show: true, text: 'There was an error solving the instance', color: 'error' }
-            return
-          }
-          API.execution.getOneDetail(this.execution, 'data')
-            .then((response) => {
-              if ('error' in response) {
-                this.snack = { show: true, text: 'There was an error retrieving the execution: ' + response.error + '.', color: 'error' }
-                return
-              }
-              this.solution = new Solution(response.data)
-            })
-        },
-        )
+        Solution.fromCornflow(this.execution, this.snack).then((solution) => (this.solution = solution))
       },
       loadCase () {
-        API.execution.getOne(this.execution).then((response) => {
-          API.instance.getOneDetail(response.instance_id, 'data').then((response) => (this.instance = new Instance(response.data)))
-          API.execution.getOneDetail(this.execution, 'data').then((response) => (this.solution = new Solution(response.data)))
-        },
-        )
+        Experiment.fromCornflow(this.execution, this.snack)
+          .then((experiment) => {
+            this.instance = experiment.instance
+            this.solution = experiment.solution
+          })
+      },
+      applyfilter (selection) {
+        this.filter.jobs = []
+        if (selection.length > 0) {
+          this.filter.jobs = [selection[0]]
+        }
       },
     },
   }

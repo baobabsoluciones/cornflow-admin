@@ -1,75 +1,72 @@
+import API from './../api/index'
+import jsonschema from 'jsonschema'
 import { arrayToObject } from './tools'
-import dataImport from './data_io'
 
-export class Instance {
+export class InstanceCore {
   constructor (data) {
     this.data = data
+    this.schema = 'pulp'
   }
 
-  get needs () { return arrayToObject(this.data.needs, ['job', 'mode', 'resource'], 'need') }
-  get durations () { return arrayToObject(this.data.durations, ['job', 'mode'], 'duration') }
-  get capacities () { return arrayToObject(this.data.resources, ['id'], 'available') }
-  get dependencies () {
-    const array = this.data.jobs
-    const jobDependencies = {}
-    for (let index = 0; index < array.length; index++) {
-      const element = array[index]
-      const treatSucc = function (el) {
-        if (!(el in jobDependencies)) {
-          jobDependencies[el] = []
+  static arrayToObject = arrayToObject
+
+  static fromCornflow (id, snack) {
+    return API.instance.getOneDetail(id, 'data')
+      .then((response) => (new this(response.data)))
+      .catch((error) => {
+        if (snack != null) {
+          snack.show = true
+          snack.text = 'There was an error loading the instance: ' + error
+          snack.color = 'error'
+        } else {
+          console.log(error)
         }
-        jobDependencies[el].push(element.id)
+      })
+  }
+
+  checkSchema (snack) {
+    // TODO: check this, use snack
+    return API.getSchema(this.schema)
+    .then((response) => {
+      const validate = jsonschema.validate
+      return validate(this.data, response)
+    })
+  }
+
+  toCornflow (snack, name = 'default') {
+    // TODO: download data_schema from server and check instance matches.
+    // if it fails => throw Error
+    const instData = { data: this.data, name: name, data_schema: this.schema }
+    return API.instance.create(instData)
+    .then((response) => {
+      if (!('error' in response)) {
+        return response
       }
-      element.successors.forEach(treatSucc)
-    }
-    return jobDependencies
+      if (snack != null) {
+        snack.show = true
+        snack.text = 'Instance creation returned error: ' + response.error + '.'
+        snack.color = 'error'
+      } else {
+        console.log(response.error)
+      }
+      throw Error('Instance creation failed')
+    })
   }
 
-  get resources () {
-    const resources = Object.keys(this.capacities)
-    return resources
+  toCornflowAndSolve (snack, config, name = 'default') {
+    return this.toCornflow(snack).then((response) => {
+      const data = { config: config, instance_id: response.id, name: name, dag_name: this.schema }
+      return API.execution.create(data)
+      .then((response) => {
+        if ('error' in response) {
+          snack = { show: true, text: 'There was an error creating the execution: ' + response.error + '.', color: 'error' }
+          throw Error('Execution creation failed')
+        }
+        return response
+      })
+    })
   }
 
-  get renResources () {
-    return this.resources.filter(Instance.resIsRenewable)
-  }
-
-  get nonRenResources () {
-    return this.resources.filter((r) => !Instance.resIsRenewable(r))
-  }
-
-  static resIsRenewable = (res) => res.charAt(0) === 'R'
-
-  static fromMM = (content) => new Instance(dataImport.loadFile(content))
-
-  get dataTable () {
-    const capacities = this.capacities
-    const resources = this.resources
-    const resCols = resources.map((k, i) => ({ type: 'number', label: `${k} (${capacities[k]})` }))
-    const table = [
-      [
-        { type: 'number', label: 'Job' },
-        { type: 'number', label: 'Mode' },
-        { type: 'number', label: 'Duration' },
-        { type: 'string', label: 'Dependencies' },
-      ],
-    ]
-    table[0].push(...resCols)
-    const durations = this.durations
-    const needs = this.needs
-    const dependencies = this.dependencies
-    const jobs = Object.keys(durations)
-    const modes = (j) => Object.keys(durations[j])
-
-    const jobModeToRow = function (j, m) {
-      const _needs = resources.map((r) => needs[j][m][r])
-      const _depend = (dependencies[j] || []).join(',')
-      const main = [j, m, durations[j][m], _depend]
-      return main.concat(_needs)
-    }
-    const newRows = []
-    jobs.forEach((j) => newRows.push(...modes(j).map((m) => jobModeToRow(j, m))))
-    table.push(...newRows)
-    return table
-  }
+  // TODO: check?
+  // TODO: initialize from json file
 }

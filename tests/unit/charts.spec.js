@@ -3,9 +3,9 @@ import table from '@/views/interactive/table'
 import graph from '@/views/interactive/graph'
 import instanceData from './../data/oneInstance'
 import solutionData from './../data/oneSolution'
-import {Instance} from '@/core/instance'
-import {Solution} from '@/core/solution'
-import {Experiment} from '@/core/experiment'
+import {Instance} from '@/app/instance'
+import {Solution} from '@/app/solution'
+import {Experiment} from '@/app/experiment'
 
 describe('testInputDataTable', () => {
   let cmp;

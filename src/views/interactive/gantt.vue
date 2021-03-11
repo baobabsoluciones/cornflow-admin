@@ -1,8 +1,10 @@
 <template>
   <g-chart
+    ref="gChart"
     :settings="{ packages: ['gantt'] }"
     :create-chart="(el, google) => new google.visualization.Gantt(el)"
     :data="chartData"
+    :events="chartEvents"
     :options="chartOptions"
   />
 </template>
@@ -20,14 +22,22 @@
         type: Object,
         required: true,
       },
+      height: {
+        type: Number,
+        required: false,
+        default: 500,
+      },
     },
     data () {
       return {
-        chartOptions: {
-          height: 1000,
-          chart: {
-            title: '',
-            subtitle: '',
+        chartEvents: {
+          select: () => {
+            const chart = this.$refs.gChart.chartObject
+            let selection = chart.getSelection()
+            if (selection.length) {
+              selection = this.chartData[selection[0].row + 1]
+            }
+            this.$emit('on-select', selection)
           },
         },
       }
@@ -40,6 +50,18 @@
           return []
         }
         return this.experiment.dataGantt
+      },
+      chartOptions: function () {
+        return {
+          gantt: {
+            trackHeight: (this.height - 2) / this.chartData.length,
+          },
+          height: this.height,
+          chart: {
+            title: '',
+            subtitle: '',
+          },
+        }
       },
     },
   }

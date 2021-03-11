@@ -19,6 +19,11 @@
         type: Object,
         required: true,
       },
+      jobs: {
+        type: Array,
+        required: false,
+        default: () => [],
+      },
     },
     data () {
       return {
@@ -27,6 +32,8 @@
             title: 'Table title!',
             subtitle: 'subtitle of table',
           },
+          page: 'enable',
+          pageSize: 20,
         },
       }
     },
@@ -35,7 +42,12 @@
         if (this.experiment.instance == null) {
           return
         }
-        return this.experiment.instance.dataTable
+        let table = this.experiment.instance.dataTable
+        const jobFilter = this.jobs
+        if (jobFilter.length > 0) {
+          table = table.filter((row, i) => i === 0 | jobFilter.includes(row[0]))
+        }
+        return table
       },
     },
   }

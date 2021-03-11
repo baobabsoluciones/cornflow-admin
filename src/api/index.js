@@ -1,21 +1,12 @@
 import makeResource from './makeResource'
 import login from './login'
-import admin from './admin'
-import config from '../config'
-
-const instancefile = (data) =>
-  fetch(config.baseUrl + '/instancefile/', {
-    method: 'POST',
-    headers: {
-      Authorization: 'access_token ' + localStorage.getItem('token'),
-    },
-    body: data,
-  })
+import { putAdmin, instancefile, getSchema } from './other'
 
 export default {
+  getSchema,
   signin: login.login,
   signup: login.signup,
-  putAdmin: admin.putAdmin,
+  putAdmin: putAdmin,
   instancefile,
   user: makeResource('user'),
   instance: makeResource('instance'),

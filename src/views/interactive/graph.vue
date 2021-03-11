@@ -23,6 +23,11 @@
         type: String,
         required: true,
       },
+      height: {
+        type: Number,
+        required: false,
+        default: 200,
+      },
     },
     data () {
       return {
@@ -33,7 +38,10 @@
               max: this.experiment.instance.capacities[this.resource],
             },
           },
-          height: 100,
+          height: this.height,
+          legend: {
+            position: 'top',
+          },
           chart: {
             title: 'Resource graph or resource ' + this.resource,
             subtitle: '',

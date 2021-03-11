@@ -1,7 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import main from '@/views/interactive/main'
-import instance from './../data/oneInstance'
-import fs from 'fs'
 import Vuex from 'vuex'
 
 const localVue = createLocalVue()
