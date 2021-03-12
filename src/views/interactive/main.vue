@@ -119,7 +119,7 @@
   import gantt from './gantt'
   import graph from './graph'
   import datatable from './table'
-  import dragndrop from '../inputData/dragndrop'
+  import dragndrop from '../dashboard/components/core/dragndrop'
   import { Experiment } from '@/app/experiment'
   import { Instance } from '@/app/instance'
   import { Solution } from '@/app/solution'
