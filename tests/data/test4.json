@@ -1,0 +1,985 @@
+{
+    "durations": [
+        {
+            "duration": 1,
+            "job": 0,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 1,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 2,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 3,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 4,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 5,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 6,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 7,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 8,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 9,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 10,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 11,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 12,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 13,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 14,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 15,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 16,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 17,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 18,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 19,
+            "mode": 1
+        },
+        {
+            "duration": 6,
+            "job": 20,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 21,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 22,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 23,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 24,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 25,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 26,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 27,
+            "mode": 1
+        },
+        {
+            "duration": 4,
+            "job": 28,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 29,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 30,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 31,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 32,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 33,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 34,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 35,
+            "mode": 1
+        },
+        {
+            "duration": 6,
+            "job": 36,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 37,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 38,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 39,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 40,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 41,
+            "mode": 1
+        },
+        {
+            "duration": 6,
+            "job": 42,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 43,
+            "mode": 1
+        },
+        {
+            "duration": 3,
+            "job": 44,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 45,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 46,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 47,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 48,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 49,
+            "mode": 1
+        },
+        {
+            "duration": 1,
+            "job": 50,
+            "mode": 1
+        },
+        {
+            "duration": 2,
+            "job": 51,
+            "mode": 1
+        }
+    ],
+    "jobs": [
+        {
+            "deadline": 12144,
+            "description": "Warm stacking preservation  - Isolate purge for BOP System",
+            "id": 0,
+            "successors": [
+                47
+            ]
+        },
+        {
+            "deadline": 11496,
+            "description": "1 YEARLY",
+            "id": 1,
+            "successors": [
+                33
+            ]
+        },
+        {
+            "deadline": 8208,
+            "description": "7 DAY",
+            "id": 2,
+            "successors": []
+        },
+        {
+            "deadline": 7728,
+            "description": "Check motor starter / Thermistor trip",
+            "id": 3,
+            "successors": []
+        },
+        {
+            "deadline": 3072,
+            "description": "NOV 1000034555-PIN HydraRacker",
+            "id": 4,
+            "successors": [
+                9
+            ]
+        },
+        {
+            "deadline": 31839,
+            "description": "14000 HOURS",
+            "id": 5,
+            "successors": []
+        },
+        {
+            "deadline": 11352,
+            "description": "RE-ACTIVATION - 5 YEARLY - PIPELINE, HP MUD, INC-06-5006-001",
+            "id": 6,
+            "successors": []
+        },
+        {
+            "deadline": 7704,
+            "description": "1 YEARLY",
+            "id": 7,
+            "successors": [
+                45,
+                33,
+                10
+            ]
+        },
+        {
+            "deadline": 4920,
+            "description": "NOV 1000014947-PIN Rev 03",
+            "id": 8,
+            "successors": []
+        },
+        {
+            "deadline": 11664,
+            "description": "Repair/replace bad heating element in AHU-8",
+            "id": 9,
+            "successors": [
+                43,
+                39
+            ]
+        },
+        {
+            "deadline": 8976,
+            "description": "7 DAY",
+            "id": 10,
+            "successors": [
+                36
+            ]
+        },
+        {
+            "deadline": 8424,
+            "description": "2.5 YEARLY",
+            "id": 11,
+            "successors": [
+                21,
+                44,
+                12
+            ]
+        },
+        {
+            "deadline": 7728,
+            "description": "RE-ACTIVATION - BOP, internal leak in ram operator piston",
+            "id": 12,
+            "successors": []
+        },
+        {
+            "deadline": 12096,
+            "description": "RE-ACTIVATION - RSPS 5 YEARLY - HOSE 03, WATER, LEG JETTING",
+            "id": 13,
+            "successors": []
+        },
+        {
+            "deadline": 13200,
+            "description": "ROP Defect level sensor on Humidifier 1B and galley.",
+            "id": 14,
+            "successors": []
+        },
+        {
+            "deadline": 8400,
+            "description": "1 MONTHS",
+            "id": 15,
+            "successors": []
+        },
+        {
+            "deadline": 8808,
+            "description": "Replace cabin HVAC trafo and controller cabin E10",
+            "id": 16,
+            "successors": []
+        },
+        {
+            "deadline": 11352,
+            "description": "RE-ACTIVATION - 1 YEARLY - LIFERAFTS - GROUP",
+            "id": 17,
+            "successors": []
+        },
+        {
+            "deadline": 10968,
+            "description": "Sold 4\" PUE ( IEU set of 6) to Intrepid",
+            "id": 18,
+            "successors": []
+        },
+        {
+            "deadline": 240,
+            "description": "Internal EB - 2020-002-002_MIP Gaskets",
+            "id": 19,
+            "successors": [
+                36,
+                38,
+                43
+            ]
+        },
+        {
+            "deadline": 9732,
+            "description": "REACTIVATION.  WCE 1Y-11M WIN",
+            "id": 20,
+            "successors": []
+        },
+        {
+            "deadline": 9552,
+            "description": "6 MONTHS",
+            "id": 21,
+            "successors": []
+        },
+        {
+            "deadline": 11352,
+            "description": "REACTIVATION - Arrange for 5Y re-certification",
+            "id": 22,
+            "successors": [
+                28
+            ]
+        },
+        {
+            "deadline": 15096,
+            "description": "WOs related to Life saving/Fire equip. prior reactivation.",
+            "id": 23,
+            "successors": [
+                45,
+                40,
+                39
+            ]
+        },
+        {
+            "deadline": 12696,
+            "description": "WOP - Change out terminals and insert links in slipring.",
+            "id": 24,
+            "successors": [
+                34,
+                39,
+                40
+            ]
+        },
+        {
+            "deadline": 3312,
+            "description": "NOV 1000033658-PIB Switch",
+            "id": 25,
+            "successors": []
+        },
+        {
+            "deadline": 11352,
+            "description": "RE-ACTIVATION - 1 YEARLY NDT - DECK CRANE NO.3",
+            "id": 26,
+            "successors": []
+        },
+        {
+            "deadline": 11328,
+            "description": "WOP Send Booster pump in for modification",
+            "id": 27,
+            "successors": [
+                44
+            ]
+        },
+        {
+            "deadline": 8376,
+            "description": "7 DAY",
+            "id": 28,
+            "successors": [
+                38,
+                44
+            ]
+        },
+        {
+            "deadline": 8592,
+            "description": "1 MONTHS",
+            "id": 29,
+            "successors": []
+        },
+        {
+            "deadline": 9864,
+            "description": "POB Expired battery in light fixture crane 1, work at height",
+            "id": 30,
+            "successors": []
+        },
+        {
+            "deadline": 8016,
+            "description": "POB Replace Proc module IRIS power DG#2",
+            "id": 31,
+            "successors": [
+                36,
+                39
+            ]
+        },
+        {
+            "deadline": 11352,
+            "description": "RE-ACTIVATION 1 YEARLY",
+            "id": 32,
+            "successors": []
+        },
+        {
+            "deadline": 8424,
+            "description": "RE-ACTIVATION - 8\" Valve For Trip Tank Strainer Line",
+            "id": 33,
+            "successors": []
+        },
+        {
+            "deadline": 2976,
+            "description": "Repair earth faults 690/440/230V switchboards",
+            "id": 34,
+            "successors": [
+                50,
+                45
+            ]
+        },
+        {
+            "deadline": 10458,
+            "description": "REACTIVATION.  WCE 1Y-11M WIN",
+            "id": 35,
+            "successors": []
+        },
+        {
+            "deadline": 7944,
+            "description": "1 YEARLY",
+            "id": 36,
+            "successors": []
+        },
+        {
+            "deadline": 3072,
+            "description": "NOV 1000034537-PIB Overhead Crane",
+            "id": 37,
+            "successors": []
+        },
+        {
+            "deadline": 7632,
+            "description": "7 DAY",
+            "id": 38,
+            "successors": [
+                42,
+                45,
+                50
+            ]
+        },
+        {
+            "deadline": 5088,
+            "description": "UV Steriliser No.1 alarming on low intensity and shutting do",
+            "id": 39,
+            "successors": [
+                47,
+                45,
+                44
+            ]
+        },
+        {
+            "deadline": 11664,
+            "description": "1 YEARLY",
+            "id": 40,
+            "successors": [
+                51,
+                50
+            ]
+        },
+        {
+            "deadline": 7992,
+            "description": "3 MONTHS",
+            "id": 41,
+            "successors": [
+                49,
+                47
+            ]
+        },
+        {
+            "deadline": 12982,
+            "description": "REACTIVATION. WCE 1Y-11M WIN",
+            "id": 42,
+            "successors": []
+        },
+        {
+            "deadline": 8016,
+            "description": "3 MONTHS",
+            "id": 43,
+            "successors": []
+        },
+        {
+            "deadline": 9912,
+            "description": "2.5 YEARLY",
+            "id": 44,
+            "successors": []
+        },
+        {
+            "deadline": 9144,
+            "description": "7 DAY",
+            "id": 45,
+            "successors": [
+                51,
+                48
+            ]
+        },
+        {
+            "deadline": 9048,
+            "description": "ROP. Fuel oil purifier #2, CPU in STOP",
+            "id": 46,
+            "successors": [
+                49
+            ]
+        },
+        {
+            "deadline": 9648,
+            "description": "7 DAY",
+            "id": 47,
+            "successors": []
+        },
+        {
+            "deadline": 9360,
+            "description": "1 MONTHS",
+            "id": 48,
+            "successors": []
+        },
+        {
+            "deadline": 11352,
+            "description": "Re-Activation; SEAL KIT For 4\" WASHPIPE  (Sold To Intrepid)",
+            "id": 49,
+            "successors": []
+        },
+        {
+            "deadline": 8136,
+            "description": "Discharge 20M3 Bilgewater to shore",
+            "id": 50,
+            "successors": []
+        },
+        {
+            "deadline": 13752,
+            "description": "RE-ACTIVATION - TETRA Site Controller sold to Integrator",
+            "id": 51,
+            "successors": []
+        }
+    ],
+    "needs": [
+        {
+            "job": 0,
+            "mode": 1,
+            "need": 2,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 1,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 2,
+            "mode": 1,
+            "need": 6,
+            "resource": "TECH"
+        },
+        {
+            "job": 3,
+            "mode": 1,
+            "need": 4,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 4,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 5,
+            "mode": 1,
+            "need": 9,
+            "resource": "TECHLEAD"
+        },
+        {
+            "job": 6,
+            "mode": 1,
+            "need": 3,
+            "resource": "TECH"
+        },
+        {
+            "job": 7,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 8,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 9,
+            "mode": 1,
+            "need": 4,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 10,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 11,
+            "mode": 1,
+            "need": 5,
+            "resource": "TECH"
+        },
+        {
+            "job": 12,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 13,
+            "mode": 1,
+            "need": 6,
+            "resource": "TECHLEAD"
+        },
+        {
+            "job": 14,
+            "mode": 1,
+            "need": 4,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 15,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 16,
+            "mode": 1,
+            "need": 4,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 17,
+            "mode": 1,
+            "need": 3,
+            "resource": "TECH"
+        },
+        {
+            "job": 18,
+            "mode": 1,
+            "need": 1,
+            "resource": "DRILLING"
+        },
+        {
+            "job": 19,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 20,
+            "mode": 1,
+            "need": 6,
+            "resource": "TECH"
+        },
+        {
+            "job": 21,
+            "mode": 1,
+            "need": 4,
+            "resource": "TECH"
+        },
+        {
+            "job": 22,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 23,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 24,
+            "mode": 1,
+            "need": 4,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 25,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 26,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 27,
+            "mode": 1,
+            "need": 1,
+            "resource": "MARINE"
+        },
+        {
+            "job": 28,
+            "mode": 1,
+            "need": 6,
+            "resource": "TECH"
+        },
+        {
+            "job": 29,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 30,
+            "mode": 1,
+            "need": 4,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 31,
+            "mode": 1,
+            "need": 1,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 32,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 33,
+            "mode": 1,
+            "need": 2,
+            "resource": "DRILLING"
+        },
+        {
+            "job": 34,
+            "mode": 1,
+            "need": 1,
+            "resource": "ELECTRIC"
+        },
+        {
+            "job": 35,
+            "mode": 1,
+            "need": 3,
+            "resource": "TECH"
+        },
+        {
+            "job": 36,
+            "mode": 1,
+            "need": 6,
+            "resource": "TECH"
+        },
+        {
+            "job": 37,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 38,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 39,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 40,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 41,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 42,
+            "mode": 1,
+            "need": 6,
+            "resource": "TECH"
+        },
+        {
+            "job": 43,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 44,
+            "mode": 1,
+            "need": 5,
+            "resource": "TECH"
+        },
+        {
+            "job": 45,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 46,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 47,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 48,
+            "mode": 1,
+            "need": 2,
+            "resource": "TECH"
+        },
+        {
+            "job": 49,
+            "mode": 1,
+            "need": 1,
+            "resource": "DRILLING"
+        },
+        {
+            "job": 50,
+            "mode": 1,
+            "need": 1,
+            "resource": "TECH"
+        },
+        {
+            "job": 51,
+            "mode": 1,
+            "need": 4,
+            "resource": "TECH"
+        }
+    ],
+    "parameters": {
+        "today": "2020-03-15 00:00"
+    },
+    "resources": [
+        {
+            "available": 12,
+            "id": "ELECTRIC",
+            "type": "R"
+        },
+        {
+            "available": 44,
+            "id": "TECH",
+            "type": "R"
+        },
+        {
+            "available": 10,
+            "id": "TECHLEAD",
+            "type": "R"
+        },
+        {
+            "available": 4,
+            "id": "DRILLING",
+            "type": "R"
+        },
+        {
+            "available": 2,
+            "id": "MARINE",
+            "type": "R"
+        }
+    ]
+}

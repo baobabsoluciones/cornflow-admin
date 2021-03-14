@@ -1,6 +1,9 @@
 const traverseObj = function (c, v, keys, value) {
   if (keys.length === 0) {
-    return v[value]
+    if (value != null) {
+      return v[value]
+    }
+    return v
   }
   const key = v[keys[0]]
   c[key] = c[key] || {}
@@ -21,6 +24,12 @@ const addDays = function (date, days) {
   result.setDate(result.getDate() + days)
   return result
 }
+
+const addHours = function (date, hours) {
+  var result = new Date(date)
+  result.setTime(result.getTime() + (hours * 60 * 60 * 1000))
+  return result
+}
 const daysToMilliseconds = function (days) {
   return days * 24 * 60 * 60 * 1000
 }
@@ -28,5 +37,6 @@ const daysToMilliseconds = function (days) {
 export {
   arrayToObject,
   addDays,
+  addHours,
   daysToMilliseconds,
 }

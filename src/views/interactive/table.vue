@@ -24,6 +24,11 @@
         required: false,
         default: () => [],
       },
+      tableName: {
+        type: String,
+        required: false,
+        default: 'condensed',
+      },
     },
     data () {
       return {
@@ -33,7 +38,7 @@
             subtitle: 'subtitle of table',
           },
           page: 'enable',
-          pageSize: 20,
+          pageSize: 40,
         },
       }
     },
@@ -42,7 +47,13 @@
         if (this.experiment.instance == null) {
           return
         }
-        let table = this.experiment.instance.dataTable
+        const maptable = {
+          condensed: 'dataTable',
+          jobsMaersk: 'jobsMaersk',
+          resources: 'resourcesTable',
+        }
+        const name = maptable[this.tableName]
+        let table = this.experiment.instance[name]
         const jobFilter = this.jobs
         if (jobFilter.length > 0) {
           table = table.filter((row, i) => i === 0 | jobFilter.includes(row[0]))

@@ -120,6 +120,11 @@
           to: '/components/users',
         },
         {
+          title: 'Input data',
+          icon: '',
+          to: '/input-data',
+        },
+        {
           title: 'Gantt',
           icon: '',
           to: '/hackathon',

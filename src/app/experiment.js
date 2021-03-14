@@ -1,4 +1,4 @@
-import { addDays, daysToMilliseconds } from './../core/tools'
+import { daysToMilliseconds, addHours } from './../core/tools'
 import { ExperimentCore } from './../core/experiment'
 import { Instance } from './instance'
 import { Solution } from './solution'
@@ -82,17 +82,25 @@ export class Experiment extends ExperimentCore {
     ]
     const dependencies = this.instance.dependencies
     const durations = this.instance.durations
+    const needs = Instance.arrayToObject(this.instance.data.needs, ['job'])
+    let firstDate
+    if (this.instance.data.parameters) {
+      firstDate = Date.parse(this.instance.data.parameters.today)
+    } else {
+      firstDate = new Date(2015, 3, 28)
+    }
 
     const outputToRow = function (el) {
       const id = el.job.toString()
-      const mode = el.mode.toString()
+      const resource = needs[el.job].resource
       const duration = durations[el.job][el.mode]
-      const firstDate = new Date(2015, 3, 28)
       let resultString = ''
       if (el.job in dependencies) {
         resultString = dependencies[el.job].join(',')
       }
-      return [id, id, mode, addDays(firstDate, el.period), null, daysToMilliseconds(duration), 100, resultString]
+      const startDate = addHours(firstDate, el.period)
+      const newDuration = daysToMilliseconds(duration / 24)
+      return [id, id, resource, startDate, null, newDuration, 100, resultString]
     }
     const newRows = this.solution.assignments.map(outputToRow)
     table.push(...newRows)

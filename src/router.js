@@ -55,6 +55,11 @@ export default new Router({
           path: 'hackathon',
           component: () => import('@/views/interactive/main'),
         },
+        {
+          name: 'Input data',
+          path: 'input-data',
+          component: () => import('@/views/interactive/inputdata'),
+        },
       ],
     },
   ],

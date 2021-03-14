@@ -11,6 +11,7 @@ export class SolutionCore {
 
   static fromCornflow (id, snack) {
     // in a static method, "this" refers to the constructor
+    // TODO: check the status of the log and see if there's a solution available.
     return API.execution.getOneDetail(id, 'status').then((response) => {
       if (response.state === 0) {
         if (snack != null) {

@@ -8,6 +8,8 @@ export class InstanceCore {
     this.schema = 'pulp'
   }
 
+  get cornflowData () { return this.data }
+
   static arrayToObject = arrayToObject
 
   static fromCornflow (id, snack) {
@@ -36,7 +38,7 @@ export class InstanceCore {
   toCornflow (snack, name = 'default') {
     // TODO: download data_schema from server and check instance matches.
     // if it fails => throw Error
-    const instData = { data: this.data, name: name, data_schema: this.schema }
+    const instData = { data: this.cornflowData, name: name, data_schema: this.schema }
     return API.instance.create(instData)
     .then((response) => {
       if (!('error' in response)) {
