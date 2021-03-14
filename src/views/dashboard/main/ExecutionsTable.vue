@@ -168,6 +168,7 @@
     props: {
       instanceId: {
         type: String,
+        required: true,
       },
       value: {
         type: Boolean,

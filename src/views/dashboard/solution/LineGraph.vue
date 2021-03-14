@@ -59,6 +59,7 @@
       },
       options: {
         type: Object,
+        required: true,
       },
     },
     data () {

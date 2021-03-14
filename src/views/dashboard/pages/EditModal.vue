@@ -58,7 +58,10 @@
 <script>
   export default {
     props: {
-      fields: Array,
+      fields: {
+        type: Array,
+        required: true,
+      },
       title: {
         type: String,
         default: '',

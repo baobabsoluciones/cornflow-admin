@@ -1,0 +1,10 @@
+<template>
+<v-navigation-drawer
+id="right-navigation-drawer"
+:right="!$vuetify.rtl"
+:expand-on-hover="expandOnHover"
+    mobile-break-point="960"
+    app
+    width="260"
+>
+</template>
