@@ -12,6 +12,7 @@ COPY package*.json ./
 
 # install deps
 RUN npm install
+RUN npm run cloudbuild
 
 # copy files and folder to workdir (/usr/src/app)
 COPY . .
