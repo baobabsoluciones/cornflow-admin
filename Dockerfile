@@ -1,8 +1,7 @@
-FROM node:12-alpine
+FROM node:15-alpine
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
-RUN apk add dos2unix
 
 # make workdir
 WORKDIR /usr/src/app
@@ -16,13 +15,9 @@ RUN npm install
 # copy files and folder to workdir (/usr/src/app)
 COPY . .
 
-# build vue app for cloud
-RUN npm run cloudbuild
-
-# convert entrypoint `initapp.sh` script to unix
-RUN chmod +x initapp.sh
-RUN dos2unix initapp.sh
+# build vue app
+RUN npm run build
 
 EXPOSE 8080
 # execute script initapp.sh
-ENTRYPOINT ["./initapp.sh"]
+CMD ["serve", "-s", "dist", "-l", "8080"]
