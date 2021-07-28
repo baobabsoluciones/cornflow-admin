@@ -9,6 +9,9 @@ WORKDIR /usr/src/app
 # copy 'package.json' and 'package-lock.json' (if available)
 COPY package*.json ./
 
+# install http server for dist static content
+RUN npm install -g http-server
+
 # install deps
 RUN npm install
 
@@ -20,4 +23,4 @@ RUN npm run build
 
 EXPOSE 8080
 # execute script initapp.sh
-CMD ["serve", "-s", "dist", "-l", "8080"]
+CMD [ "http-server", "dist" ]
