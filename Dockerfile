@@ -1,4 +1,4 @@
-FROM node:15-alpine
+FROM node:12-alpine
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
