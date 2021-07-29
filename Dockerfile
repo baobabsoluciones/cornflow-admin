@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:15-alpine as build
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
@@ -9,9 +9,6 @@ WORKDIR /usr/src/app
 # copy 'package.json' and 'package-lock.json' (if available)
 COPY package*.json ./
 
-# install http server for dist static content
-RUN npm install -g http-server
-
 # install deps
 RUN npm install
 
@@ -19,8 +16,13 @@ RUN npm install
 COPY . .
 
 # build vue app
-RUN npm run build
+RUN npm run build:cloud
 
-EXPOSE 8080
-# execute script initapp.sh
-CMD [ "http-server", "dist" ]
+FROM nginx:stable-alpine as cdn
+
+# copy dist builded vue app to nginx container
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
