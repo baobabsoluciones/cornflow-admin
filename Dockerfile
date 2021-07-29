@@ -1,8 +1,7 @@
-FROM node:12-alpine
+FROM node:12-alpine as build
 
 # install python for gyp pkg
 RUN apk --no-cache add --virtual builds-deps build-base python
-RUN apk add dos2unix
 
 # make workdir
 WORKDIR /usr/src/app
@@ -16,10 +15,14 @@ RUN npm install
 # copy files and folder to workdir (/usr/src/app)
 COPY . .
 
-# convert entrypoint `initapp.sh` script to unix
-RUN chmod +x initapp.sh
-RUN dos2unix initapp.sh
+# build vue app
+RUN npm run build:cloud
 
-EXPOSE 8080
-# execute script initapp.sh
-ENTRYPOINT ["./initapp.sh"]
+FROM nginx:stable-alpine as cdn
+
+# copy dist builded vue app to nginx container
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
