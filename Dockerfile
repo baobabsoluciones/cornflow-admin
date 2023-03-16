@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # install deps
-RUN npm install
+RUN npm install -g @angular/cli@13.1.4 && npm install
 
 # copy files and folder to workdir (/usr/src/app)
 COPY . .
